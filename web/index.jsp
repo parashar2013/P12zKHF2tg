@@ -11,9 +11,41 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="icon" href="favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-        <title>ECE 356 Project</title>
+        
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        
+        <!-- JS -->
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+    
+        <title>Login | HospitalDB</title>
     </head>
     <body>
-        <h1>Hospital Database</h1>
+        <div class="container">
+
+            <form class="form-signin">
+                <h2 class="form-signin-heading">Login to HospitalDB</h2><hr>
+                
+                <div class="btn-group" data-toggle="buttons" id="doctor-patient-buttons">
+                    <label class="btn btn-primary active">
+                      <input type="radio" name="login_type" id="patient" checked=""> Patient
+                    </label>
+                    <label class="btn btn-primary">
+                      <input type="radio" name="login_type" id="doctor"> Doctor
+                    </label>
+                </div>
+
+                <input type="text" class="form-control" placeholder="Health Card">
+                <input type="password" class="form-control" placeholder="Password">
+                <label class="checkbox">
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+                <button class="btn btn-lg btn-block btn-primary" type="submit">Login</button>
+            </form>
+
+        </div> <!-- /container -->
     </body>
 </html>
