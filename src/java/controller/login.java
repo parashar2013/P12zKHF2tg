@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package ece356;
+package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;

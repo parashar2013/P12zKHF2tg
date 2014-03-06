@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package ece356;
+package controller;
 
+import ece356.UserDBAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;

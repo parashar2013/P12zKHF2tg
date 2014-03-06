@@ -10,11 +10,11 @@
     </servlet>
     <servlet>
         <servlet-name>DBTestServlet</servlet-name>
-        <servlet-class>ece356.DBTestServlet</servlet-class>
+        <servlet-class>controller.DBTestServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>login</servlet-name>
-        <servlet-class>ece356.login</servlet-class>
+        <servlet-class>controller.login</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserDataServlet</servlet-name>
