@@ -6,8 +6,14 @@
 
 package controller;
 
+import ece356.UserDBAO;
+import java.sql.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,10 +41,17 @@ public class login extends HttpServlet {
         PrintWriter out = response.getWriter();
         login_id = request.getParameter("login_id");
         password = request.getParameter("login_password");
-            
+ 
+        EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("HospitalDBPU");
+        
+        EntityManager em = emf.createEntityManager();
+        
+             
         if(!login_id.isEmpty() && !password.isEmpty())
         {
-                url = "/home.jsp";
+            Query q1 = em.createQuery("SELECT * FROM Employee WHERE id=\"" +login_id + "\" password=\"" + password+"\""); 
+            
         }
         else
         {
