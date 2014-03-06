@@ -26,10 +26,10 @@ CREATE TABLE Patient (
 
 CREATE TABLE Doc_Patient (
     doctor_id INT NOT NULL,
-    health_card CHAR(15) NOT NULL,
+    patient_health_card CHAR(15) NOT NULL,
     foreign key (doctor_id)
         references Employee (id),
-    foreign key (patient)
+    foreign key (patient_health_card)
         references Patient (health_card)
 ) ENGINE = MyISAM;
 
