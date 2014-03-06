@@ -7,9 +7,10 @@
 package controller;
 
 import Utilities.md5;
+import entity.Employee;
+import entity.Patient;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.MessageDigest;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -37,10 +38,11 @@ public class login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url,login_id,password;
+        String url,login_id,password,login_type;
         PrintWriter out = response.getWriter();
         login_id = request.getParameter("login_id");
         password = md5.md5(request.getParameter("login_password"));
+        login_type = request.getParameter("login_type");
  
         EntityManagerFactory emf =
             Persistence.createEntityManagerFactory("HospitalDBPU");
@@ -50,10 +52,39 @@ public class login extends HttpServlet {
              
         if(!login_id.isEmpty() && !password.isEmpty())
         {
-            Query q1 = em.createQuery("SELECT e FROM Employee e WHERE e.id=" + login_id + " AND e.password='" + password+"'");
+            Query q1 ;
+            if(login_type.equals("employee"))
+            {
+                q1 = em.createQuery("SELECT e  FROM Employee e WHERE e.id=" + login_id + " AND e.password='" + password+"'",Employee.class);
+            }
+            else
+            {
+                q1 = em.createQuery("SELECT e  FROM Patient e WHERE e.health_card=" + login_id + " AND e.password='" + password+"'",Patient.class);
+                
+            }
+                
             try {
-                q1.getSingleResult();
-                url = "/home.jsp";
+                
+                if(login_type.equals("employee"))
+                {
+                    Employee emp = (Employee)q1.getSingleResult();
+                    if(emp.getRole().equals("Doctor"))
+                    {
+                        url = "/Doctor_home.jsp";
+                    }
+                    else if (emp.getRole().equals("Staff"))
+                    {
+                        url = "/Staff_home.jsp";
+                    }
+                    else if (emp.getRole().equals("FO"))
+                    {
+                        url = "/FO_home.jsp";
+                    }
+                    else
+                        url = "/error.jsp";
+                }
+                else
+                    url = "/Patient_home.jsp";
             }
             catch (Exception e) {
             request.setAttribute("exception", e);
