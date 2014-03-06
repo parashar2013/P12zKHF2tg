@@ -31,10 +31,10 @@
                 
                 <div class="btn-group" data-toggle="buttons" id="doctor-patient-buttons">
                     <label class="btn btn-primary active">
-                      <input type="radio" class="radio" name="login_type" id="login_patient" value="employee" checked> Employee
+                      <input type="radio" class="radio" name="login_type" id="login_patient" value="patient" checked> Patient
                     </label>
                     <label class="btn btn-primary">
-                      <input type="radio" class="radio" name="login_type" id="login_doctor" value="doctor"> Doctor
+                      <input type="radio" class="radio" name="login_type" id="login_doctor" value="employee"> Employee
                     </label>
                 </div>
 
