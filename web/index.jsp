@@ -39,7 +39,7 @@
                 </div>
 
                 <input type="text" name="login_id" id="login_id" class="form-control" placeholder="Health Card" maxlength="10">
-                <input type="password" name="login_password" id="login_id" class="form-control" placeholder="Password">
+                <input type="password" name="login_password" id="login_password" class="form-control" placeholder="Password">
                 
                 <label class="checkbox">
                     <input type="checkbox" name="remember_me"> Remember me
