@@ -50,8 +50,7 @@ public class login extends HttpServlet {
              
         if(!login_id.isEmpty() && !password.isEmpty())
         {
-            //Query q1 = em.createQuery("SELECT e FROM Employee e WHERE id='" +login_id + "' password='" + password+"'");
-            Query q1 = em.createQuery("SELECT COUNT(e) FROM Employee e");
+            Query q1 = em.createQuery("SELECT e FROM Employee e WHERE e.id=" + login_id + " AND e.password='" + password+"'");
             try {
                 q1.getSingleResult();
                 url = "/home.jsp";
