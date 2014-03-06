@@ -6,10 +6,10 @@
 
 package controller;
 
-import ece356.UserDBAO;
-import java.sql.*;
+import Utilities.md5;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -40,7 +40,7 @@ public class login extends HttpServlet {
         String url,login_id,password;
         PrintWriter out = response.getWriter();
         login_id = request.getParameter("login_id");
-        password = request.getParameter("login_password");
+        password = md5.md5(request.getParameter("login_password"));
  
         EntityManagerFactory emf =
             Persistence.createEntityManagerFactory("HospitalDBPU");
@@ -50,12 +50,20 @@ public class login extends HttpServlet {
              
         if(!login_id.isEmpty() && !password.isEmpty())
         {
-            Query q1 = em.createQuery("SELECT * FROM Employee WHERE id=\"" +login_id + "\" password=\"" + password+"\""); 
-            
+            //Query q1 = em.createQuery("SELECT e FROM Employee e WHERE id='" +login_id + "' password='" + password+"'");
+            Query q1 = em.createQuery("SELECT COUNT(e) FROM Employee e");
+            try {
+                q1.getSingleResult();
+                url = "/home.jsp";
+            }
+            catch (Exception e) {
+            request.setAttribute("exception", e);
+                url = "/error.jsp";
+            }
         }
         else
         {
-                url = "/error.jsp";
+            url = "/error.jsp";
         }
 
         request.getServletContext().getRequestDispatcher(url).forward(request, response);
