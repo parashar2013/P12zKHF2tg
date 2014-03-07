@@ -6,7 +6,7 @@
 
 package controller;
 
-import utilities.md5;
+import lib.md5;
 import entity.Employee;
 import entity.Patient;
 import java.io.IOException;
