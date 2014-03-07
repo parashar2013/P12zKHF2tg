@@ -37,9 +37,8 @@ public class login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String url,login_id,password,login_type;
-        PrintWriter out = response.getWriter();
+        String url, login_id,password, login_type;
+        
         login_id = request.getParameter("login_id");
         password = md5.md5(request.getParameter("login_password"));
         login_type = request.getParameter("login_type");
@@ -93,7 +92,9 @@ public class login extends HttpServlet {
         }
         else
         {
-            url = "/error.jsp";
+            url = request.getContextPath();
+            response.sendRedirect(url);
+            return;
         }
 
         request.getServletContext().getRequestDispatcher(url).forward(request, response);
