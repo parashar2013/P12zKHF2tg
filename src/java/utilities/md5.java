@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Utilities;
+package utilities;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

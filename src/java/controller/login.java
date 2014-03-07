@@ -6,7 +6,7 @@
 
 package controller;
 
-import Utilities.md5;
+import utilities.md5;
 import entity.Employee;
 import entity.Patient;
 import java.io.IOException;
@@ -98,6 +98,15 @@ public class login extends HttpServlet {
 
         request.getServletContext().getRequestDispatcher(url).forward(request, response);
 
+        
+        // Session example
+        /*
+            UserData u = new UserData();
+            u.setFavColour(request.getParameter("name"));
+            u.setUserName(request.getParameter("color"));
+            
+            request.getSession().setAttribute("userData", u);
+        */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
