@@ -16,6 +16,10 @@
         <servlet-name>logout</servlet-name>
         <servlet-class>controller.logout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>controller.test</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>java</servlet-name>
         <url-pattern>/java</url-pattern>
@@ -32,6 +36,10 @@
         <servlet-name>logout</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -40,4 +48,7 @@
     <welcome-file-list>
         <welcome-file>index</welcome-file>
     </welcome-file-list>
+    <listener>
+        <listener-class>lib.EMF</listener-class>
+    </listener>
 </web-app>

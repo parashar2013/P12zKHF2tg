@@ -7,10 +7,10 @@
 package controller;
 
 import lib.md5;
+import lib.EMF;
 import entity.Employee;
 import entity.Patient;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -43,12 +43,8 @@ public class login extends HttpServlet {
         //password = md5.md5(request.getParameter("login_password"));
         password = request.getParameter("login_password");
         login_type = request.getParameter("login_type");
- 
-        EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("HospitalDBPU");
         
-        EntityManager em = emf.createEntityManager();
-        
+        EntityManager em = EMF.createEntityManager();
              
         if(!login_id.isEmpty() && !password.isEmpty())
         {
