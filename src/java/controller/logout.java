@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Parashar
  */
-public class index extends HttpServlet {
+public class logout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,15 +30,11 @@ public class index extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean logged_in = false;
+
+        request.getSession().removeAttribute("userData");
         
-        String url = (String)request.getSession().getAttribute("userData");
-        
-        if (url == null) {
-            url = "/login.jsp";
-        }
-        
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+        // Redirect back to home page
+        response.sendRedirect(request.getContextPath());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

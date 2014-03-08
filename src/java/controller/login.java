@@ -70,21 +70,21 @@ public class login extends HttpServlet {
                     Employee emp = (Employee)q1.getSingleResult();
                     if(emp.getRole().equals("Doctor"))
                     {
-                        url = "/Doctor_home.jsp";
+                        url = "/doctor_home.jsp";
                     }
                     else if (emp.getRole().equals("Staff"))
                     {
-                        url = "/Staff_home.jsp";
+                        url = "/staff_home.jsp";
                     }
                     else if (emp.getRole().equals("FO"))
                     {
-                        url = "/FO_home.jsp";
+                        url = "/fo_home.jsp";
                     }
                     else
                         url = "/error.jsp";
                 }
                 else
-                    url = "/Patient_home.jsp";
+                    url = "/patient_home.jsp";
             }
             catch (Exception e) {
             request.setAttribute("exception", e);
@@ -98,7 +98,8 @@ public class login extends HttpServlet {
             return;
         }
 
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+        request.getSession().setAttribute("userData", url);
+        response.sendRedirect(request.getContextPath());
 
         
         // Session example

@@ -13,5 +13,16 @@
     </head>
     <body>
         <h1>Welcome! You are logged in.</h1>
+        <%= session.getAttribute("userData") %>
+        
+        
+        <!-- retrieving session object example -->
+        <%--
+            <jsp:useBean id="userData" class="ece356.UserData" scope="session"/>
+
+            Name: <%= userData.getUserName() %><br/>
+            Colour: <%= userData.getFavColour() %><br/>
+        --%>
+        
     </body>
 </html>

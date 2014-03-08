@@ -16,6 +16,10 @@
         <servlet-name>index</servlet-name>
         <servlet-class>controller.index</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>logout</servlet-name>
+        <servlet-class>controller.logout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>java</servlet-name>
         <url-pattern>/java</url-pattern>
@@ -32,12 +36,16 @@
         <servlet-name>index</servlet-name>
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    <welcome-file-list>  
-        <welcome-file>index</welcome-file>  
-    </welcome-file-list> 
+    <welcome-file-list>
+        <welcome-file>index</welcome-file>
+    </welcome-file-list>
 </web-app>
