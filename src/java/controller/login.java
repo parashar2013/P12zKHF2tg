@@ -40,7 +40,8 @@ public class login extends HttpServlet {
         String url, login_id,password, login_type;
         
         login_id = request.getParameter("login_id");
-        password = md5.md5(request.getParameter("login_password"));
+        //password = md5.md5(request.getParameter("login_password"));
+        password = request.getParameter("login_password");
         login_type = request.getParameter("login_type");
  
         EntityManagerFactory emf =
