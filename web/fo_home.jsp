@@ -4,14 +4,15 @@
     Author     : Parashar
 --%>
 
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello FO.</h1>
-    </body>
-</html>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<t:base_template>
+    <jsp:attribute name="title">Home</jsp:attribute>
+    <jsp:attribute name="content">
+        <div class="container" id="content-container">
+            Financial officer home page placeholder
+        </div>
+    </jsp:attribute>
+</t:base_template>

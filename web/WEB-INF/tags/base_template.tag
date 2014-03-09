@@ -10,6 +10,8 @@
 <%@ attribute name="title" %>
 <%@ attribute name="content" fragment="true" %>
 
+<jsp:useBean id="user" class="entity.Employee" scope="session"/>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -44,6 +46,7 @@
                   <ul class="nav navbar-nav">
                       <li class="active"><a href="#">Home</a></li>
                   </ul>
+                  <p class="navbar-text navbar-right">Signed in as <a href="logout" class="navbar-link"><%= user.getName() %></a></p>
               </div><!--/.nav-collapse -->
             </div>
         </div>
