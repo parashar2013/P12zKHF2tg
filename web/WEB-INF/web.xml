@@ -20,6 +20,22 @@
         <servlet-name>test</servlet-name>
         <servlet-class>controller.test</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>doctor</servlet-name>
+        <servlet-class>controller.doctor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>patient</servlet-name>
+        <servlet-class>controller.patient</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>staff</servlet-name>
+        <servlet-class>controller.staff</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>financial_officer</servlet-name>
+        <servlet-class>controller.financial_officer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>java</servlet-name>
         <url-pattern>/java</url-pattern>
@@ -39,6 +55,22 @@
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>doctor</servlet-name>
+        <url-pattern>/doctor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>patient</servlet-name>
+        <url-pattern>/patient</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>staff</servlet-name>
+        <url-pattern>/staff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>financial_officer</servlet-name>
+        <url-pattern>/financial_officer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
