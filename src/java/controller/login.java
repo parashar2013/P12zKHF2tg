@@ -11,10 +11,10 @@ import lib.EMF;
 import entity.Employee;
 import entity.Patient;
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
+import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,75 +37,59 @@ public class login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url, login_id,password, login_type;
+        String password, login_type;
+        Integer login_id;
+        Object user = null;
         
-        login_id = request.getParameter("login_id");
+        login_id = request.getParameter("login_id").isEmpty() ? null : parseInt(request.getParameter("login_id"));
         //password = md5.md5(request.getParameter("login_password"));
         password = request.getParameter("login_password");
         login_type = request.getParameter("login_type");
         
         EntityManager em = EMF.createEntityManager();
              
-        if(!login_id.isEmpty() && !password.isEmpty())
-        {
-            Query q1 ;
-            if(login_type.equals("employee"))
+        if (login_id == null || password.isEmpty()) {
+            sendBackToLoginPage(request, response);
+        } else {
+            if (login_type.equals("employee"))
             {
-                q1 = em.createQuery("SELECT e  FROM Employee e WHERE e.id=" + login_id + " AND e.password='" + password+"'",Employee.class);
+                TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.id = :login_id AND e.password = :password", Employee.class)
+                        .setParameter("login_id", login_id)
+                        .setParameter("password", password);
+                
+                List<Employee> empList = query.getResultList();
+                
+                if (empList.isEmpty()) {
+                    sendBackToLoginPage(request, response);
+                } else {
+                    user = empList.get(0);
+                }
             }
             else
             {
-                q1 = em.createQuery("SELECT e  FROM Patient e WHERE e.health_card=" + login_id + " AND e.password='" + password+"'",Patient.class);
+                TypedQuery<Patient> query = em.createQuery("SELECT e FROM Patient e WHERE e.health_card = :login_id AND e.password = :password", Patient.class)
+                        .setParameter("login_id", login_id)
+                        .setParameter("password", password);
                 
-            }
+                List<Patient> patientList = query.getResultList();
                 
-            try {
-                
-                if(login_type.equals("employee"))
-                {
-                    Employee emp = (Employee)q1.getSingleResult();
-                    if(emp.getRole().equals("Doctor"))
-                    {
-                        url = "/doctor_home.jsp";
-                    }
-                    else if (emp.getRole().equals("Staff"))
-                    {
-                        url = "/staff_home.jsp";
-                    }
-                    else if (emp.getRole().equals("FO"))
-                    {
-                        url = "/fo_home.jsp";
-                    }
-                    else
-                        url = "/error.jsp";
+                if (patientList.isEmpty()) {
+                    sendBackToLoginPage(request, response);
+                } else {
+                    user = patientList.get(0);
                 }
-                else
-                    url = "/patient_home.jsp";
-            }
-            catch (Exception e) {
-            request.setAttribute("exception", e);
-                url = "/error.jsp";
             }
         }
-        else
-        {
-            url = request.getContextPath();
-            response.sendRedirect(url);
-            return;
-        }
 
-        request.getSession().setAttribute("userData", url);
-        response.sendRedirect(request.getContextPath());
-
+        request.getSession().setAttribute("user", user);
         
-        // Session example
-        /*
-            UserData u = new UserData();
-            u.setFavColour(request.getParameter("name"));
-            u.setUserName(request.getParameter("color"));
-            
-            request.getSession().setAttribute("userData", u);
-        */
+        response.sendRedirect(request.getContextPath());    // redirect back to index page
+    }
+    
+    private void sendBackToLoginPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        response.sendRedirect(request.getContextPath());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

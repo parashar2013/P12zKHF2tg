@@ -7,11 +7,11 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import entity.*;
 
 /**
  *
@@ -30,12 +30,31 @@ public class index extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean logged_in = false;
         
-        String url = (String)request.getSession().getAttribute("userData");
+        String url = "/";
+        Object user = request.getSession().getAttribute("user");
         
-        if (url == null) {
+        if (user == null) {
             url = "/login.jsp";
+        }
+        else if (user.getClass() == Employee.class) {
+            Employee emp = (Employee)user;
+        
+            if (emp.getRole().equals("Doctor"))
+            {
+                url = "/doctor_home.jsp";
+            }
+            else if (emp.getRole().equals("Staff"))
+            {
+                url = "/staff_home.jsp";
+            }
+            else if (emp.getRole().equals("FO"))
+            {
+                url = "/fo_home.jsp";
+            }
+        }
+        else if (user.getClass() == Patient.class) {
+            url = "/patient_home.jsp";
         }
         
         request.getServletContext().getRequestDispatcher(url).forward(request, response);
