@@ -4,13 +4,12 @@
     Author     : Parashar
 --%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@tag description="Overall page template" pageEncoding="UTF-8"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@ attribute name="title" %>
 <%@ attribute name="content" fragment="true" %>
-
-<jsp:useBean id="user" class="entity.Employee" scope="session"/>
 
 <!DOCTYPE html>
 <html>
@@ -46,7 +45,11 @@
                   <ul class="nav navbar-nav">
                       <li class="active"><a href="#">Home</a></li>
                   </ul>
-                  <p class="navbar-text navbar-right">Signed in as <a href="logout" class="navbar-link"><%= user.getName() %></a></p>
+                  <p class="navbar-text navbar-right">
+                      <c:if test="${not empty user}">
+                         Signed in as <a href="logout" class="navbar-link">${user.name}</a>
+                      </c:if>
+                  </p>
               </div><!--/.nav-collapse -->
             </div>
         </div>
