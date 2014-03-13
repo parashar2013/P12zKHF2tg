@@ -20,7 +20,11 @@ body {
 }
 
 #content-container {
-    margin-top: 40px;
+    margin-top: 15px;
+}
+
+#insert-visit-record .form-control {
+    width: auto;
 }
 
 .form-signin {
