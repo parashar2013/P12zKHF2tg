@@ -7,25 +7,28 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@tag description="Overall page template" pageEncoding="UTF-8"%>
 
+<c:set var="context" value="${pageContext.request.contextPath}" />
+
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@ attribute name="title" %>
 <%@ attribute name="content" fragment="true" %>
+<%@ attribute name="nav" fragment="true" %>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="icon" href="favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="${context}/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="${context}/favicon.ico" type="image/x-icon" />
         
         <!-- CSS -->
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="${context}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${context}/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="${context}/css/style.css">
         
         <!-- JS -->
         <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <script src="${context}/js/bootstrap.min.js"></script>
     
         <title>${title} | HospitalDB</title>
     </head>
@@ -43,7 +46,7 @@
               </div>
               <div class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
-                      <li class="active"><a href="#">Home</a></li>
+                      <jsp:invoke fragment="nav"/>
                   </ul>
                   <p class="navbar-text navbar-right">
                       <c:if test="${not empty user}">

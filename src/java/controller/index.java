@@ -42,7 +42,7 @@ public class index extends HttpServlet {
         
             if (emp.getRole().equals("Doctor"))
             {
-                url = "/doctor_home.jsp";
+                url = "/doctor/home.jsp";
             }
             else if (emp.getRole().equals("Staff"))
             {
@@ -57,7 +57,8 @@ public class index extends HttpServlet {
             url = "/patient_home.jsp";
         }
         
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
+        //request.getServletContext().getRequestDispatcher(url).forward(request, response);
+        response.sendRedirect(request.getContextPath() + url);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
