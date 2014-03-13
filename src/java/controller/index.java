@@ -46,15 +46,15 @@ public class index extends HttpServlet {
             }
             else if (emp.getRole().equals("Staff"))
             {
-                url = "/staff_home.jsp";
+                url = "/staff/home.jsp";
             }
             else if (emp.getRole().equals("FO"))
             {
-                url = "/fo_home.jsp";
+                url = "/financial-officer/home.jsp";
             }
         }
         else if (user.getClass() == Patient.class) {
-            url = "/patient_home.jsp";
+            url = "/patient/home.jsp";
         }
         
         //request.getServletContext().getRequestDispatcher(url).forward(request, response);
