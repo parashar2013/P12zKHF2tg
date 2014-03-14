@@ -39,6 +39,7 @@ public class login extends HttpServlet {
             throws ServletException, IOException {
         String password, login_type;
         Integer login_id;
+        String hCard;
         Object user = null;
         
         login_id = request.getParameter("login_id").isEmpty() ? null : parseInt(request.getParameter("login_id"));
@@ -67,8 +68,8 @@ public class login extends HttpServlet {
             }
             else
             {
-                TypedQuery<Patient> query = em.createQuery("SELECT e FROM Patient e WHERE e.health_card = :login_id AND e.password = :password", Patient.class)
-                        .setParameter("login_id", login_id)
+                TypedQuery<Patient> query = em.createQuery("SELECT e FROM Patient e WHERE e.healthCard = :login_id AND e.password = :password", Patient.class)
+                        .setParameter("login_id", request.getParameter("login_id"))
                         .setParameter("password", password);
                 
                 List<Patient> patientList = query.getResultList();
