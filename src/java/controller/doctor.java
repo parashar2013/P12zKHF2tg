@@ -30,22 +30,44 @@ public class doctor extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet doctor</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet doctor at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
+        String page = request.getPathInfo();
+        
+        if (page == null || page.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/doctor/");
+            return;
         }
+        
+        switch (page) {
+            case "/": 
+                homePage(request, response);
+                return;
+            case "/home": 
+                homePage(request, response);
+                return;
+            case "/insert-record": 
+                insertRecordPage(request, response);
+                return;
+            case "/search": 
+                searchPage(request, response);
+                return;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+    
+    private void homePage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/view/doctor/home.jsp").forward(request, response);
+    }
+    
+    private void insertRecordPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
+    }
+    
+        private void searchPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/view/doctor/search.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

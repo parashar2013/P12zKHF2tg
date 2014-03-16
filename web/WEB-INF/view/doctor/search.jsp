@@ -1,6 +1,6 @@
 <%-- 
-    Document   : doctor_home
-    Created on : Mar 8, 2014, 3:10:40 PM
+    Document   : search
+    Created on : Mar 12, 2014, 10:27:59 PM
     Author     : Parashar
 --%>
 
@@ -8,15 +8,16 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
-    <jsp:attribute name="title">Home</jsp:attribute>
+    <jsp:attribute name="title">Search</jsp:attribute>
+    
     <jsp:attribute name="nav">
-        <li class="active"><a href="home.jsp">Home</a></li>
-        <li><a href="insert-record.jsp">Insert Record</a></li>
-        <li><a href="search.jsp">Search</a></li>
+        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="search" /></jsp:include>
     </jsp:attribute>
+        
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            Doctor home page placeholder
+            Doctor search page placeholder<br>
+            <input type="text" />
         </div>
     </jsp:attribute>
 </t:base_template>

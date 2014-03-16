@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@tag description="Overall page template" pageEncoding="UTF-8"%>
 
-<c:set var="context" value="${pageContext.request.contextPath}" />
+<c:set var="context" value="${pageContext.request.contextPath}" scope="request" />
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@ attribute name="title" %>
