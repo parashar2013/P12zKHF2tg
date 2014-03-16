@@ -6,7 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<c:set var="active_tab" value="home" scope="request" />
 
 <t:base_template>
     <jsp:attribute name="title">Home</jsp:attribute>

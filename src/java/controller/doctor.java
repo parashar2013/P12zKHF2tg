@@ -7,7 +7,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +64,7 @@ public class doctor extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
     }
     
-        private void searchPage(HttpServletRequest request, HttpServletResponse response)
+    private void searchPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/view/doctor/search.jsp").forward(request, response);
     }
