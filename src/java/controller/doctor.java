@@ -6,11 +6,16 @@
 
 package controller;
 
+import entity.*;
 import java.io.IOException;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.EMF;
 
 /**
  *
@@ -56,6 +61,17 @@ public class doctor extends HttpServlet {
     
     private void homePage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        
+        TypedQuery<Patient> query = em.createQuery("SELECT p FROM Patient p WHERE p.defaultDoctorId = :id", Patient.class)
+                                        .setParameter("id", me.getId());
+        
+        List<Patient> patientList = query.getResultList();
+        
+        request.setAttribute("patientList", patientList);
+        
         request.getRequestDispatcher("/WEB-INF/view/doctor/home.jsp").forward(request, response);
     }
     
