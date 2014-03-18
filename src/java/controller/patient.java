@@ -88,8 +88,7 @@ public class patient extends HttpServlet {
             Employee emp = (Employee)user;
 
             TypedQuery<Patient> query =
-                    em.createQuery("SELECT p FROM Patient p WHERE p.defaultDoctorId = :id and p.healthCard = :healthCard", Patient.class)
-                      .setParameter("id", emp.getId())
+                    em.createQuery("SELECT p FROM Patient p WHERE p.healthCard = :healthCard", Patient.class)
                       .setParameter("healthCard", healthCard);
 
             List<Patient> patientList = query.getResultList();
