@@ -31,7 +31,7 @@
                 <tbody
                 <c:forEach var="patient" items="${patientList}">
                     <tr>
-                        <td><a href="#">${patient.name}</a></td>
+                        <td><a href="${context}/patient/info?healthCard=${patient.healthCard}">${patient.name}</a></td>
                         <td>${patient.address}</td>
                         <td>${patient.phoneNumber}</td>
                         <td>${patient.numberOfVisits}</td>

@@ -42,6 +42,7 @@ public class index extends HttpServlet {
         
             if (emp.getRole().equals("Doctor"))
             {
+                // Send to doctor controller with page set to home
                 url = "/doctor/home";
             }
             else if (emp.getRole().equals("Staff"))

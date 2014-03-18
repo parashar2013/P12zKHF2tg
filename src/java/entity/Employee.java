@@ -7,6 +7,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.*;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -47,6 +49,12 @@ public class Employee implements Serializable {
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "Doc_Patient",
+              joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName="id"),
+              inverseJoinColumns = @JoinColumn(name = "patient_health_card", referencedColumnName="health_card"))
+    private List<Patient> patients;
 
     public Employee() {
     }
@@ -92,6 +100,10 @@ public class Employee implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public List<Patient> getPatients() {
+        return patients;
     }
 
     @Override
