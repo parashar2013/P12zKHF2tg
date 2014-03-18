@@ -6,7 +6,7 @@
 
 package controller;
 
-import lib.md5;
+import lib.utilities.*;
 import lib.EMF;
 import entity.Employee;
 import entity.Patient;
@@ -43,7 +43,7 @@ public class login extends HttpServlet {
         Object user = null;
         
         login_id = request.getParameter("login_id").isEmpty() ? null : parseInt(request.getParameter("login_id"));
-        //password = md5.md5(request.getParameter("login_password"));
+        //password = utilities.md5(request.getParameter("login_password"));
         password = request.getParameter("login_password");
         login_type = request.getParameter("login_type");
         

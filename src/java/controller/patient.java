@@ -6,12 +6,18 @@
 
 package controller;
 
+import entity.Employee;
+import entity.Patient;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.EMF;
+import static lib.utilities.getView;
 
 /**
  *
@@ -30,21 +36,72 @@ public class patient extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet patient</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet patient at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
+        String page = request.getPathInfo();
+        
+        if (page == null || page.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/patient/");
+            return;
+        }
+        
+        switch (page) {
+            case "/": 
+                homePage(request, response);
+                return;
+            case "/home": 
+                homePage(request, response);
+                return;
+            case "/info": 
+                info(request, response);
+                return;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+    
+    private void homePage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        
+        TypedQuery<Patient> query = em.createQuery("SELECT p FROM Patient p WHERE p.defaultDoctorId = :id", Patient.class)
+                                        .setParameter("id", me.getId());
+        
+        List<Patient> patientList = query.getResultList();
+        
+        request.setAttribute("patientList", patientList);
+        
+        request.getRequestDispatcher(getView("doctor/home.jsp")).forward(request, response);
+    }
+    
+    private void info(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        Object user = request.getSession().getAttribute("user");
+        String healthCard = request.getParameter("healthCard");
+        
+        if (user.getClass() == Employee.class) {
+            // check if patients doctor id == employees id
+            // forward to doctors version of patient info page
+            
+            Employee emp = (Employee)user;
+
+            TypedQuery<Patient> query =
+                    em.createQuery("SELECT p FROM Patient p WHERE p.defaultDoctorId = :id and p.healthCard = :healthCard", Patient.class)
+                      .setParameter("id", emp.getId())
+                      .setParameter("healthCard", healthCard);
+
+            List<Patient> patientList = query.getResultList();
+            
+            if (patientList.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            } else {
+                request.setAttribute("patient", patientList.get(0));
+
+                request.getRequestDispatcher(getView("doctor/patient-info.jsp")).forward(request, response);
+            }
         }
     }
 

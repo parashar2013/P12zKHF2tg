@@ -7,15 +7,16 @@
 <%
     String activeTab = request.getParameter("active_tab");
     
-    
     String homeTabClass = "", insertTabClass = "", searchTabClass = "";
     
-    if (activeTab.equals("home")){
-        homeTabClass = "class='active'";
-    } else if (activeTab.equals("insert-record")) {
-        insertTabClass = "class='active'";
-    } else if (activeTab.equals("search")) {
-        searchTabClass = "class='active'";
+    if (activeTab != null) {
+        if (activeTab.equals("home")){
+            homeTabClass = "class='active'";
+        } else if (activeTab.equals("insert-record")) {
+            insertTabClass = "class='active'";
+        } else if (activeTab.equals("search")) {
+            searchTabClass = "class='active'";
+        }
     }
     
 %>
