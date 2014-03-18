@@ -1,5 +1,5 @@
 <%-- 
-    Document   : doctor_home
+    Document   : patient_home
     Created on : Mar 8, 2014, 3:10:40 PM
     Author     : Parashar
 --%>
@@ -17,24 +17,19 @@
     
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <h3>Current Patients</h3><hr>
-            
+            <h3>Past Appointments</h3><hr>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Phone Number</th>
-                        <th>Number of Visits</th>
+                        <th>Doctor ID</th>
+                        <th>Date and Time</th>
                     </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="patient" items="${patientList}">
+                <c:forEach var="appointment" items="${appointmentList}">
                     <tr>
-                        <td><a href="${context}/patient/info?healthCard=${patient.healthCard}">${patient.name}</a></td>
-                        <td>${patient.address}</td>
-                        <td>${patient.phoneNumber}</td>
-                        <td>${patient.numberOfVisits}</td>
+                        <td>${appointment.doctorId}</td>
+                        <td>${appointment.appointmentPK.dateAndTime}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

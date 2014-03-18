@@ -6,6 +6,7 @@
 
 package controller;
 
+import entity.Appointment;
 import entity.Employee;
 import entity.Patient;
 import java.io.IOException;
@@ -50,8 +51,8 @@ public class patient extends HttpServlet {
             case "/home": 
                 homePage(request, response);
                 return;
-            case "/info": 
-                info(request, response);
+            case "/profile": 
+                profile(request, response);
                 return;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -62,16 +63,27 @@ public class patient extends HttpServlet {
             throws ServletException, IOException {
         EntityManager em = EMF.createEntityManager();
         
-        Employee me = (Employee)request.getSession().getAttribute("user");
+        Patient me = (Patient)request.getSession().getAttribute("user");
         
-        TypedQuery<Patient> query = em.createQuery("SELECT p FROM Patient p WHERE p.defaultDoctorId = :id", Patient.class)
-                                        .setParameter("id", me.getId());
+        TypedQuery<Appointment> query = em.createQuery("SELECT a FROM Appointment a WHERE a.appointmentPK.healthCard = :id", Appointment.class)
+                                        .setParameter("id", me.getHealthCard());
         
-        List<Patient> patientList = query.getResultList();
+        List<Appointment> appointmentList = query.getResultList();
         
-        request.setAttribute("patientList", patientList);
+        request.setAttribute("appointmentList", appointmentList);
         
-        request.getRequestDispatcher(getView("doctor/home.jsp")).forward(request, response);
+        request.getRequestDispatcher(getView("patient/home.jsp")).forward(request, response);
+    }
+    
+    private void profile(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        Patient me = (Patient)request.getSession().getAttribute("user");
+        
+        request.setAttribute("patientProfile", me);
+        
+        request.getRequestDispatcher(getView("patient/profile.jsp")).forward(request, response);
     }
     
     private void info(HttpServletRequest request, HttpServletResponse response)
