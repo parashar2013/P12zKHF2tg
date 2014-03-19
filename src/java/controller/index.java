@@ -55,7 +55,7 @@ public class index extends HttpServlet {
             }
         }
         else if (user.getClass() == Patient.class) {
-            url = "/patient/home.jsp";
+            url = "/patient/home";
         }
         
         //request.getServletContext().getRequestDispatcher(url).forward(request, response);
