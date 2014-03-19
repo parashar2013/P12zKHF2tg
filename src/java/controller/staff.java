@@ -6,12 +6,19 @@
 
 package controller;
 
+import entity.Employee;
+import entity.Patient;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.EMF;
 
 /**
  *
@@ -30,22 +37,40 @@ public class staff extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet staff</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet staff at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
+        String page = request.getPathInfo();
+        if (page == null || page.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/staff/");
+            return;
         }
+
+        switch (page) {
+            case "/": 
+                homePage(request, response);
+                return;
+            case "/home": 
+                homePage(request, response);
+                return;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+
+    }
+    
+        private void homePage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        
+        TypedQuery<Object[]> query = em.createQuery("SELECT e FROM Doc_Staff e WHERE e.staff_id = :id",Object[].class)
+                                        .setParameter("id", me.getId());
+        
+
+        List<Object[]> patientList = query.getResultList();
+        
+        request.setAttribute("doctorList", patientList);
+        
+        request.getRequestDispatcher("/WEB-INF/view/staff/home.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
