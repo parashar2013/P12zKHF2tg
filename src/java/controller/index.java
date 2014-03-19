@@ -47,7 +47,7 @@ public class index extends HttpServlet {
             }
             else if (emp.getRole().equals("Staff"))
             {
-                url = "/staff/home.jsp";
+                url = "/staff/home";
             }
             else if (emp.getRole().equals("FO"))
             {
