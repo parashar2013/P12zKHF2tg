@@ -55,7 +55,12 @@ public class Employee implements Serializable {
               joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName="id"),
               inverseJoinColumns = @JoinColumn(name = "patient_health_card", referencedColumnName="health_card"))
     private List<Patient> patients;
-
+ 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "Doc_Staff",
+              joinColumns = @JoinColumn(name = "staff_id", referencedColumnName="id"),
+              inverseJoinColumns = @JoinColumn(name = "doctor_id", referencedColumnName="id"))
+    private List<Employee> doctors;
     public Employee() {
     }
 
@@ -106,6 +111,9 @@ public class Employee implements Serializable {
         return patients;
     }
 
+    public List<Employee> getDoctors() {
+        return doctors;
+    }
     @Override
     public int hashCode() {
         int hash = 0;

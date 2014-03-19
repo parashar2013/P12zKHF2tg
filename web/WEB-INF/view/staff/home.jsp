@@ -14,8 +14,8 @@
         <div class="container" id="content-container">
             <h3>Doctors</h3>
             <ul>
-                <c:forEach var="(object[])doctor" items="${doctorList}">
-                    <li>${doctor[1]}</li>
+                <c:forEach var="doctor" items="${doctorList}">
+                    <li>${doctor.name}</li>
                 </c:forEach>
             <ul/>
         </div>

@@ -62,13 +62,13 @@ public class staff extends HttpServlet {
         
         Employee me = (Employee)request.getSession().getAttribute("user");
         
-        TypedQuery<Object[]> query = em.createQuery("SELECT e FROM Doc_Staff e WHERE e.staff_id = :id",Object[].class)
+        TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.id = :id",Employee.class)
                                         .setParameter("id", me.getId());
         
-
-        List<Object[]> patientList = query.getResultList();
+        Employee staff = query.getSingleResult();
+        List<Employee> doctorList = staff.getDoctors();
         
-        request.setAttribute("doctorList", patientList);
+        request.setAttribute("doctorList", doctorList);
         
         request.getRequestDispatcher("/WEB-INF/view/staff/home.jsp").forward(request, response);
     }
