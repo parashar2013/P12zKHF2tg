@@ -9,10 +9,12 @@ package controller;
 import entity.Appointment;
 import entity.Employee;
 import entity.Patient;
+import entity.Visit;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.EMF;
 import static lib.utilities.getView;
+import org.apache.catalina.tribes.util.Arrays;
 
 /**
  *
@@ -69,12 +72,16 @@ public class patient extends HttpServlet {
         
         Patient me = (Patient)request.getSession().getAttribute("user");
         
-        TypedQuery<Appointment> query = em.createQuery("SELECT a FROM Appointment a WHERE a.appointmentPK.healthCard = :id", Appointment.class)
-                                        .setParameter("id", me.getHealthCard());
+        Query apps = em.createNativeQuery("SELECT e.name, a.date_and_time FROM Appointment a LEFT JOIN Employee e "
+                + "ON a.doctor_id = e.id WHERE a.health_card = " + me.getHealthCard());
+        Query visits = em.createNativeQuery("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time FROM Visit v LEFT JOIN Employee e "
+                + "ON v.doctor_id = e.id WHERE v.health_card = " + me.getHealthCard());
         
-        List<Appointment> appointmentList = query.getResultList();
+        List appointmentList = apps.getResultList();
+        List visitList = visits.getResultList();
         
         request.setAttribute("appointmentList", appointmentList);
+        request.setAttribute("visitList", visitList);
         
         request.getRequestDispatcher(getView("patient/home.jsp")).forward(request, response);
     }
@@ -143,8 +150,7 @@ public class patient extends HttpServlet {
             me.setSinNumber(parseInt(SIN));
         }
         
-        String qy = update.toString();
-        request.setAttribute("sentquery", qy);
+        request.setAttribute("updateMsg", "Your profile has been updated!<br><br>");
         em.getTransaction().commit();
         
         profile(request, response);
