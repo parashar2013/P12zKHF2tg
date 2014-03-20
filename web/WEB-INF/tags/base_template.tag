@@ -50,7 +50,7 @@
                   </ul>
                   <p class="navbar-text navbar-right">
                       <c:if test="${not empty user}">
-                         Signed in as <a href="${context}/logout" class="navbar-link" title="Logout">${user.name}</a>
+                         ${user.name} | <a href="${context}/logout" class="" title="Logout">Logout</a>
                       </c:if>
                   </p>
               </div><!--/.nav-collapse -->
