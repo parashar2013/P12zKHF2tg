@@ -23,4 +23,3 @@
 
 <li <%=homeTabClass%>><a href="${context}/patient/home">Past Appointments</a></li>
 <li <%=insertTabClass%>><a href="${context}/patient/profile">Update Profile</a></li>
-<li <%=searchTabClass%>><a href="${context}/patient/diagnoses">Diagnoses</a></li>

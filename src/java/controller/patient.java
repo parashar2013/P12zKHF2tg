@@ -10,6 +10,7 @@ import entity.Appointment;
 import entity.Employee;
 import entity.Patient;
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -54,8 +55,8 @@ public class patient extends HttpServlet {
             case "/profile": 
                 profile(request, response);
                 return;
-            case "/info":   // for doctor
-                info(request, response);
+            case "/updateProfile":
+                updateProfile(request, response);
                 return;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -87,6 +88,66 @@ public class patient extends HttpServlet {
         request.setAttribute("patientProfile", me);
         
         request.getRequestDispatcher(getView("patient/profile.jsp")).forward(request, response);
+    }
+    
+    private void updateProfile(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        String name, hCard, address, phone, SIN, numVisits, defaultDoctorId, curHealth, pw;
+
+        name = request.getParameter("name");
+        hCard = request.getParameter("hCard");
+        address = request.getParameter("address");
+        phone = request.getParameter("phone");
+        SIN = request.getParameter("SIN");
+        numVisits = request.getParameter("numVisits");
+        defaultDoctorId = request.getParameter("defaultDoctorId");
+        curHealth = request.getParameter("curHealth");
+        pw = request.getParameter("pw");
+
+        EntityManager em = EMF.createEntityManager();
+
+        em.getTransaction().begin();
+        
+        TypedQuery update = em.createQuery("UPDATE Patient p SET p.address = :address, "
+                + "p.currentHealth = :curHealth, "
+                + "p.defaultDoctorId = :defaultDoctorId, "
+                + "p.name = :name, "
+                + "p.numberOfVisits = :numVisits, "
+                + "p.password = :pw, "
+                + "p.phoneNumber = :phone, "
+                + "p.sinNumber = :SIN "
+                + "WHERE p.healthCard = :hCard", Patient.class)
+                .setParameter("name", name)
+                .setParameter("hCard", hCard)
+                .setParameter("address", address)
+                .setParameter("phone", phone)
+                .setParameter("SIN", parseInt(SIN))
+                .setParameter("numVisits", parseInt(numVisits))
+                .setParameter("defaultDoctorId", parseInt(defaultDoctorId))
+                .setParameter("curHealth", curHealth)
+                .setParameter("pw", pw);
+        
+        int rowcount = update.executeUpdate();
+        
+        if (rowcount == 1) {
+            Patient me = (Patient)request.getSession().getAttribute("user");
+            me.setAddress(address);
+            me.setCurrentHealth(curHealth);
+            me.setDefaultDoctorId(parseInt(defaultDoctorId));
+            me.setHealthCard(hCard);
+            me.setName(name);
+            me.setNumberOfVisits(parseInt(numVisits));
+            me.setPassword(pw);
+            me.setPhoneNumber(phone);
+            me.setSinNumber(parseInt(SIN));
+        }
+        
+        String qy = update.toString();
+        request.setAttribute("sentquery", qy);
+        em.getTransaction().commit();
+        
+        profile(request, response);
     }
     
     private void info(HttpServletRequest request, HttpServletResponse response)
