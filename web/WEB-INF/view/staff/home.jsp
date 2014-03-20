@@ -15,7 +15,11 @@
             <h3>Doctors</h3>
             <ul>
                 <c:forEach var="doctor" items="${doctorList}">
-                    <li>${doctor.name}</li>
+                    <li>
+                        ${doctor.name}
+                        <a href="${context}/staff/home?doctor_id=${doctor.id}&pg=patients">Patients</a>
+                        <a href="${context}/staff/home?doctor_id=${doctor.id}&pg=appointments">Appointments</a>
+                    </li>
                 </c:forEach>
             <ul/>
         </div>

@@ -4,14 +4,33 @@
     Author     : Babanani
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<t:base_template>
+    <jsp:attribute name="title">Appointments for ${doctor}</jsp:attribute>
+    <jsp:attribute name="content">
+        <div class="container" id="content-container">
+            <h3>Appointments for ${doctor}</h3><hr>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Patient health Card</th>
+                        <th>Date and Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="appointment" items="${appointmentList}">
+                    <tr>
+                        <td>${appointment.getAppointmentPK().getHealthCard()}</td>
+                        <td>${appointment.getAppointmentPK().getDateAndTime()}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+            
+        </div>
+    </jsp:attribute>
+</t:base_template>

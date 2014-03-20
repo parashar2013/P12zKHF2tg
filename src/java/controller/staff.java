@@ -6,10 +6,12 @@
 
 package controller;
 
+import entity.Appointment;
 import entity.Employee;
 import entity.Patient;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -50,6 +52,12 @@ public class staff extends HttpServlet {
             case "/home": 
                 homePage(request, response);
                 return;
+            case "/home.jsp":
+                 homePage(request,response);
+            case "/patients.jsp":
+                 patientsPage(request,response);
+            case "/appointments.jsp":
+                 appointmentsPage(request,response);
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -61,8 +69,17 @@ public class staff extends HttpServlet {
         EntityManager em = EMF.createEntityManager();
         
         Employee me = (Employee)request.getSession().getAttribute("user");
+        String page = request.getParameter("pg");
         
-        TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.id = :id",Employee.class)
+        if(page != null)
+        {
+            if(page.equals("appointments"))
+                appointmentsPage(request,response);
+            else
+                patientsPage(request,response);
+        }
+        
+        TypedQuery<Employee> query = em.createNamedQuery("Employee.findById",Employee.class)
                                         .setParameter("id", me.getId());
         
         Employee staff = query.getSingleResult();
@@ -72,7 +89,43 @@ public class staff extends HttpServlet {
         
         request.getRequestDispatcher("/WEB-INF/view/staff/home.jsp").forward(request, response);
     }
-
+         
+         private void patientsPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        //Employee me = (Employee)request.getSession().getAttribute("user");
+        int doc_id = request.getParameter("doctor_id").isEmpty()?null:parseInt(request.getParameter("doctor_id"));
+        
+        TypedQuery<Employee> query = em.createNamedQuery("Employee.findById",Employee.class)
+                                        .setParameter("id", doc_id);
+        
+        Employee doc = query.getSingleResult();
+        List<Patient> patientList = doc.getPatients();
+        
+        request.setAttribute("patientList", patientList);
+        request.setAttribute("doctor", doc.getName());
+        request.getRequestDispatcher("/WEB-INF/view/staff/patients.jsp").forward(request, response);
+    }
+        
+         private void appointmentsPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        //Employee me = (Employee)request.getSession().getAttribute("user");
+        int doc_id = request.getParameter("doctor_id").isEmpty()?null:parseInt(request.getParameter("doctor_id"));
+  
+        TypedQuery<Employee> query1 = em.createNamedQuery("Employee.findById",Employee.class)
+                                        .setParameter("id", doc_id);       
+        TypedQuery<Appointment> query2 = em.createNamedQuery("Appointment.findByDoctorId",Appointment.class)
+                                        .setParameter("doctorId", doc_id);
+        
+        List<Appointment> appointmentList = query2.getResultList();
+        
+        request.setAttribute("appointmentList", appointmentList);
+        request.setAttribute("doctor", query1.getSingleResult().getName());
+        request.getRequestDispatcher("/WEB-INF/view/staff/appointments.jsp").forward(request, response);
+    }       
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
