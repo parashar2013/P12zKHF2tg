@@ -130,6 +130,19 @@ public class patient extends HttpServlet {
         
         int rowcount = update.executeUpdate();
         
+        if (rowcount == 1) {
+            Patient me = (Patient)request.getSession().getAttribute("user");
+            me.setAddress(address);
+            me.setCurrentHealth(curHealth);
+            me.setDefaultDoctorId(parseInt(defaultDoctorId));
+            me.setHealthCard(hCard);
+            me.setName(name);
+            me.setNumberOfVisits(parseInt(numVisits));
+            me.setPassword(pw);
+            me.setPhoneNumber(phone);
+            me.setSinNumber(parseInt(SIN));
+        }
+        
         String qy = update.toString();
         request.setAttribute("sentquery", qy);
         em.getTransaction().commit();
