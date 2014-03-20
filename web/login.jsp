@@ -8,7 +8,10 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
+    <jsp:attribute name="scripts"><script src="${context}/js/login.js"></script></jsp:attribute>
+    
     <jsp:attribute name="title">Login</jsp:attribute>
+    
     <jsp:attribute name="content">
         <div class="container" id="content-container">
             <form class="form-signin" action="login" method="get">
