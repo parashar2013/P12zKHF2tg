@@ -7,14 +7,7 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -65,6 +58,10 @@ public class Patient implements Serializable {
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn(name="default_doctor_id", referencedColumnName="id")
+    private Employee defaultDoctor;
 
     public Patient() {
     }
@@ -139,6 +136,10 @@ public class Patient implements Serializable {
 
     public void setDefaultDoctorId(int defaultDoctorId) {
         this.defaultDoctorId = defaultDoctorId;
+    }
+    
+    public String getDefaultDoctorName() {
+        return defaultDoctor.getName();
     }
 
     public String getCurrentHealth() {
