@@ -42,7 +42,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">HospitalDB</a>
+                <a class="navbar-brand" href="${context}/">HospitalDB</a>
               </div>
               <div class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
@@ -50,7 +50,7 @@
                   </ul>
                   <p class="navbar-text navbar-right">
                       <c:if test="${not empty user}">
-                         Signed in as <a href="${context}/logout" class="navbar-link" title="Logout">${user.name}</a>
+                         ${user.name} | <a href="${context}/logout">Logout</a>
                       </c:if>
                   </p>
               </div><!--/.nav-collapse -->

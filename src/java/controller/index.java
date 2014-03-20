@@ -36,6 +36,8 @@ public class index extends HttpServlet {
         
         if (user == null) {
             url = "/login.jsp";
+            request.getServletContext().getRequestDispatcher(url).forward(request, response);
+            return;
         }
         else if (user.getClass() == Employee.class) {
             Employee emp = (Employee)user;
@@ -58,7 +60,6 @@ public class index extends HttpServlet {
             url = "/patient/home";
         }
         
-        //request.getServletContext().getRequestDispatcher(url).forward(request, response);
         response.sendRedirect(request.getContextPath() + url);
     }
 

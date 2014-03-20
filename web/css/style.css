@@ -53,3 +53,14 @@ body {
 #doctor-patient-buttons {
     margin-bottom: 18px;
 }
+
+.patient-info-container {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 5px;
+    background-color: #fdfdfd;
+    border-width: 1px;
+    border-color: #ddd;
+    border-radius: 4px;
+    box-shadow: none;
+}
