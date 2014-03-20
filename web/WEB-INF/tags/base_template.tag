@@ -13,6 +13,7 @@
 <%@ attribute name="title" %>
 <%@ attribute name="content" fragment="true" %>
 <%@ attribute name="nav" fragment="true" %>
+<%@ attribute name="scripts" fragment="true" %>
 
 <!DOCTYPE html>
 <html>
@@ -29,6 +30,7 @@
         <!-- JS -->
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="${context}/js/bootstrap.min.js"></script>
+        <jsp:invoke fragment="scripts"/>
     
         <title>${title} | HospitalDB</title>
     </head>

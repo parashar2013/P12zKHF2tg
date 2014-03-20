@@ -61,6 +61,9 @@ public class patient extends HttpServlet {
             case "/updateProfile":
                 updateProfile(request, response);
                 return;
+            case "/info":
+                info(request, response);
+                return;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
