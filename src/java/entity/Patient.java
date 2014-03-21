@@ -7,6 +7,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -62,6 +63,9 @@ public class Patient implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name="default_doctor_id", referencedColumnName="id")
     private Employee defaultDoctor;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="patient")
+    private List<Appointment> appointments;
 
     public Patient() {
     }
@@ -156,6 +160,10 @@ public class Patient implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 
     @Override
