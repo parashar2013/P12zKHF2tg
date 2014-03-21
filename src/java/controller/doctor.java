@@ -54,6 +54,9 @@ public class doctor extends HttpServlet {
             case "/search": 
                 searchPage(request, response);
                 return;
+            case "/insert": 
+                insertRecord(request, response);
+                return;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -71,13 +74,41 @@ public class doctor extends HttpServlet {
         List<Patient> patientList = me.getPatients();
         List<Patient> patientListDefault = query.getResultList();
         
-        request.setAttribute("patientList", patientList);
+        request.setAttribute("patientList", patientListDefault);
         
         request.getRequestDispatcher("/WEB-INF/view/doctor/home.jsp").forward(request, response);
     }
     
     private void insertRecordPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
+    }
+    
+    private void insertRecord(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        String hCard, diagnosis, prescriptions, comments;
+
+        hCard = request.getParameter("health_card");
+        diagnosis = request.getParameter("diagnosis");
+        prescriptions = request.getParameter("prescriptions");
+        comments = request.getParameter("comments");
+
+        EntityManager em = EMF.createEntityManager();
+
+        //em.getTransaction().begin();
+        
+        Visit v = new Visit();
+        
+        v.setComments(comments);
+        v.setDiagnosis(diagnosis);
+        v.setDoctorId(me.getId());
+        //v.setDuration(duration);
+        
+        //em.getTransaction().commit();
+        
+        //profile(request, response);
         request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
     }
     

@@ -119,7 +119,7 @@ public class patient extends HttpServlet {
 
         em.getTransaction().begin();
         
-        TypedQuery update = em.createQuery("UPDATE Patient p SET p.address = :address, "
+        Query update = em.createQuery("UPDATE Patient p SET p.address = :address, "
                 + "p.currentHealth = :curHealth, "
                 + "p.defaultDoctorId = :defaultDoctorId, "
                 + "p.name = :name, "
@@ -177,6 +177,11 @@ public class patient extends HttpServlet {
                       .setParameter("healthCard", healthCard);
 
             List<Patient> patientList = query.getResultList();
+            Query visits = em.createNativeQuery("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time FROM Visit v LEFT JOIN Employee e "
+                    + "ON v.doctor_id = e.id WHERE v.health_card = " + patientList.get(0).getHealthCard());
+
+            List visitList = visits.getResultList();
+            request.setAttribute("visitList", visitList);
             
             if (patientList.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

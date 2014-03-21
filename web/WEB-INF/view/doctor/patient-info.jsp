@@ -19,15 +19,34 @@
         <div class="container" id="content-container">
             <h3>Patient Record for ${patient.name}</h3><hr>
             
-            <h4>Patient Info</h4>
-            <div class="patient-info-container">
-            address = ${patient.address} <br>
-            phoneNumber = ${patient.phoneNumber} <br>
-            Default Doctor = ${patient.defaultDoctorName} <br>
-            currentHealth = ${patient.currentHealth}
-            </div>
-            
+            <h4>Patient Info</h4><br>
+            <!--<div class="patient-info-container">-->
+            <b>Address:</b> ${patient.address} <br>
+            <b>Phone Number:</b> ${patient.phoneNumber} <br>
+            <b>Default Doctor:</b> ${patient.defaultDoctorName} <br>
+            <b>Current Health:</b> ${patient.currentHealth}
+            <!--</div>-->
+            <br><br>
             <h4>Past Visits</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Diagnosis</th>
+                        <th>Prescriptions</th>
+                        <th>Date and Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="visit" items="${visitList}">
+                    <tr>
+                    <c:forEach var="var" items="${visit}">
+                        <td>${var}</td>
+                    </c:forEach>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
 
         </div>
     </jsp:attribute>

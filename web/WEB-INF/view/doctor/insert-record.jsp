@@ -19,24 +19,33 @@
         <div class="container" id="content-container">
             <h3>Insert Patient Visit Record</h3><hr>
             
-            <form role="form" id="insert-visit-record" action="${context}/doctor?action=insert-record" method="POST">
-              <div class="form-group">
-                <label for="health_card">Health Card</label>
-                <input type="text" class="form-control" id="health_card" placeholder="">
-              </div>
-              <div class="form-group">
-                <label for="diagnosis">Diagnosis</label>
-                <textarea class="form-control" id="diagnosis" rows="4" cols="80"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="prescriptions">Prescriptions</label>
-                <input type="text" class="form-control" id="prescriptions" placeholder="">
-              </div>
-              <div class="form-group">
-                <label for="comments">Comments (not visible to patient)</label>
-                <textarea class="form-control" id="comments" rows="4" cols="80"></textarea>
-              </div>
-              <button type="submit" class="btn btn-default">Submit</button>
+            <form role="form" id="insert-visit-record" action="${context}/doctor/insert" method="POST">
+                <div class="form-group">
+                    <label for="health_card">Health Card</label>
+                    <input type="text" class="form-control" id="health_card" name="health_card" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration</label>
+                    <input type="text" class="form-control" id="duration" name="duration" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="diagnosis">Diagnosis</label>
+                    <textarea class="form-control" id="diagnosis" name="diagnosis" rows="4" cols="80"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="prescriptions">Prescriptions</label>
+                    <input type="text" class="form-control" id="prescriptions" name="prescriptions" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="treatment">Treatment</label>
+                    <input type="date" class="form-control" id="treatment" name="treatment">
+                </div>
+                <div class="form-group">
+                <div class="form-group">
+                    <label for="comments">Comments (not visible to patient)</label>
+                    <textarea class="form-control" id="comments" name="comments" rows="4" cols="80"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
             </form>
             
         </div>
