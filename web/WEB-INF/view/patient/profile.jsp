@@ -19,10 +19,8 @@
         <div class="container" id="content-container">
             <form action="${context}/patient/updateProfile" method="get">
                 <h3>Update Profile</h3><hr>
-                Shinkuu Hadoken (You can't update the profile but you can at least see it)<br><br>
                 
-                QUERY: <br>
-                ${sentquery}<br><br>
+                ${updateMsg}
                 
                 Name<br>
                 <input type="text" name="name" value="${patientProfile.name}"><br>

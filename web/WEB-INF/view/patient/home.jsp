@@ -17,19 +17,42 @@
     
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <h3>Past Appointments</h3><hr>
+            <h3>Past Appointments (Currently All Appointments)</h3><hr>
+            
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Doctor ID</th>
+                        <th>Doctor</th>
                         <th>Date and Time</th>
                     </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="appointment" items="${appointmentList}">
                     <tr>
-                        <td>${appointment.doctorId}</td>
-                        <td>${appointment.appointmentPK.dateAndTime}</td>
+                    <c:forEach var="var" items="${appointment}">
+                        <td>${var}</td>
+                    </c:forEach>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+            <br>
+            <h3>Past Visits</h3><hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Diagnosis</th>
+                        <th>Prescriptions</th>
+                        <th>Date and Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="visit" items="${visitList}">
+                    <tr>
+                    <c:forEach var="var" items="${visit}">
+                        <td>${var}</td>
+                    </c:forEach>
                     </tr>
                 </c:forEach>
                 </tbody>
