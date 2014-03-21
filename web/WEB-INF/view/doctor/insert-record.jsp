@@ -21,8 +21,14 @@
             
             <form role="form" id="insert-visit-record" action="${context}/doctor?action=insert-record" method="POST">
               <div class="form-group">
-                <label for="health_card">Health Card</label>
-                <input type="text" class="form-control" id="health_card" placeholder="">
+                <label for="health_card">Appointment</label>
+                <select class="form-control" id="appointment">
+                    <c:forEach var="patient" items="${patients}">
+                        <c:forEach var="appt" items="${patient.appointments}">
+                            <option value="appt">${patient.name} - ${appt.appointmentPK.dateAndTime}</option>
+                        </c:forEach>
+                    </c:forEach>
+                </select>
               </div>
               <div class="form-group">
                 <label for="diagnosis">Diagnosis</label>

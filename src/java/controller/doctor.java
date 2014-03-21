@@ -78,6 +78,18 @@ public class doctor extends HttpServlet {
     
     private void insertRecordPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        
+        EntityManager em = EMF.createEntityManager();
+        
+        TypedQuery<Patient> query = em.createNamedQuery("Patient.findByDefaultDoctorId", Patient.class)
+                .setParameter("defaultDoctorId", me.getId());
+        
+        List<Patient> patients = query.getResultList();
+        
+        request.setAttribute("patients", patients);
+        
         request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
     }
     

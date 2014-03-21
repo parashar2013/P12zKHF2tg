@@ -8,13 +8,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -36,6 +30,14 @@ public class Appointment implements Serializable {
     @Basic(optional = false)
     @Column(name = "doctor_id")
     private int doctorId;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "health_card", updatable = false, insertable = false)
+    private Patient patient;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", referencedColumnName = "id", updatable = false, insertable = false)
+    private Employee doctor;
 
     public Appointment() {
     }
@@ -67,6 +69,14 @@ public class Appointment implements Serializable {
 
     public void setDoctorId(int doctorId) {
         this.doctorId = doctorId;
+    }
+    
+    public Patient getPatient() {
+        return patient;
+    }
+    
+    public Employee getDoctor() {
+        return doctor;
     }
 
     @Override
