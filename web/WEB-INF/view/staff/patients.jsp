@@ -11,6 +11,9 @@
 <t:base_template>
     <jsp:attribute name="title">Patients for ${doctor}</jsp:attribute>
     <jsp:attribute name="content">
+        <div class="container" id="button-container">
+            <a href="${context}/staff/patient_info.jsp">New Patient</a>
+        </div>
         <div class="container" id="content-container">
             <h3>Patients for ${doctor}</h3><hr>
             
@@ -24,9 +27,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    ${patientList.size()}
                 <c:forEach var="patient" items="${patientList}">
                     <tr>
-                        <td><a href="${context}/patient/info?healthCard=${patient.healthCard}">${patient.name}</a></td>
+                        <td><a href="${context}/staff/patient_info.jsp?health_card=${patient.healthCard}">${patient.name}</a></td>
                         <td>${patient.address}</td>
                         <td>${patient.phoneNumber}</td>
                         <td>${patient.numberOfVisits}</td>

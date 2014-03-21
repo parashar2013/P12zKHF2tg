@@ -24,8 +24,8 @@
                 <tbody>
                 <c:forEach var="appointment" items="${appointmentList}">
                     <tr>
-                        <td>${appointment.getAppointmentPK().getHealthCard()}</td>
-                        <td>${appointment.getAppointmentPK().getDateAndTime()}</td>
+                        <td>${appointment[0]}</td>
+                        <td>${appointment[1]}</td>
                     </tr>
                 </c:forEach>
                 </tbody>
