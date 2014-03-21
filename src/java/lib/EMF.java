@@ -26,7 +26,9 @@ public class EMF implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
+        if (emf != null) {
             emf.close();
+        }
     }
 
     public static EntityManager createEntityManager() {
