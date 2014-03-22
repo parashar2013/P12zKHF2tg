@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.EMF;
+import lib.utilities;
 
 /**
  *
@@ -78,7 +79,7 @@ public class doctor extends HttpServlet {
         
         request.setAttribute("patientList", patientListDefault);
         
-        request.getRequestDispatcher("/WEB-INF/view/doctor/home.jsp").forward(request, response);
+        request.getRequestDispatcher(utilities.getView("doctor/home.jsp")).forward(request, response);
     }
     
     private void insertRecordPage(HttpServletRequest request, HttpServletResponse response)
@@ -100,7 +101,7 @@ public class doctor extends HttpServlet {
         
         request.setAttribute("results", results);
         
-        request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
+        request.getRequestDispatcher(utilities.getView("doctor/insert-record.jsp")).forward(request, response);
     }
     
     private void insertRecord(HttpServletRequest request, HttpServletResponse response)
@@ -137,14 +138,12 @@ public class doctor extends HttpServlet {
         
         em.getTransaction().commit();
         
-        //profile(request, response);
-        //request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
-        insertRecordPage(request, response);
+        request.getRequestDispatcher(utilities.getView("doctor/insert-record-result.jsp")).forward(request, response);
     }
     
     private void searchPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/view/doctor/search.jsp").forward(request, response);
+        request.getRequestDispatcher(utilities.getView("doctor/search.jsp")).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
