@@ -18,17 +18,12 @@
     <jsp:attribute name="content">
         <div class="container" id="content-container">
             <h3>Insert Patient Visit Record</h3><hr>
-            <br>
-            ${ass}
-            <br><br>
             <form role="form" id="insert-visit-record" action="${context}/doctor/insert" method="POST">
               <div class="form-group">
                 <label for="health_card">Appointment</label>
                 <select class="form-control" id="appointment" name="appointment">
-                    <c:forEach var="patient" items="${patients}">
-                        <c:forEach var="appt" items="${patient.appointments}">
-                            <option value="${patient.healthCard} - ${appt.appointmentPK.dateAndTime}">${patient.name} - ${appt.appointmentPK.dateAndTime}</option>
-                        </c:forEach>
+                    <c:forEach var="result" items="${results}">
+                        <option value="${result[1]} - ${result[2]}">${result[0]} - ${result[2]}</option>
                     </c:forEach>
                 </select>
               </div>

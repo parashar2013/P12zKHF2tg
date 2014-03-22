@@ -88,12 +88,17 @@ public class doctor extends HttpServlet {
         
         EntityManager em = EMF.createEntityManager();
         
-        TypedQuery<Patient> query = em.createNamedQuery("Patient.findByDefaultDoctorId", Patient.class)
-                .setParameter("defaultDoctorId", me.getId());
+        Query query = em.createNativeQuery("SELECT p.name, p.health_card, a.date_and_time "
+                + "FROM Doc_Patient dp "
+                + "JOIN Patient p ON (p.health_card = dp.patient_health_card)"
+                + "NATURAL JOIN Appointment a "
+                + "WHERE dp.doctor_id = ?")
+                .setParameter(1, me.getId())
+                .setParameter(2, me.getId());
         
-        List<Patient> patients = query.getResultList();
+        List results = query.getResultList();
         
-        request.setAttribute("patients", patients);
+        request.setAttribute("results", results);
         
         request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
     }
@@ -117,22 +122,18 @@ public class doctor extends HttpServlet {
 
         em.getTransaction().begin();
         
-        String qstr = "INSERT INTO Visit VALUES (" 
-                + duration + ", '" 
-                + hCard + "', " 
-                + me.getId() + ", '" 
-                + diagnosis + "', '"
-                + prescriptions + "', " 
-                + treatment + ", '" 
-                + comments + "', " 
-                + appDate + ", " 
-                + new Date() + ")";
-        
-        Query q = em.createQuery(qstr);
+        Query q = em.createNativeQuery("INSERT INTO Visit VALUES (?,?,?,?,?,?,?,?,?)")
+                .setParameter(1, duration)
+                .setParameter(2, hCard)
+                .setParameter(3, me.getId())
+                .setParameter(4, diagnosis)
+                .setParameter(5, prescriptions)
+                .setParameter(6, treatment)
+                .setParameter(7, comments)
+                .setParameter(8, appDate)
+                .setParameter(9, new Date());
         
         q.executeUpdate();
-        
-        request.setAttribute("ass", qstr);
         
         em.getTransaction().commit();
         
