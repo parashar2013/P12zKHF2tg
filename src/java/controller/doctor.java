@@ -8,8 +8,10 @@ package controller;
 
 import entity.*;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -100,28 +102,43 @@ public class doctor extends HttpServlet {
             throws ServletException, IOException {
         
         Employee me = (Employee)request.getSession().getAttribute("user");
-        String hCard, diagnosis, prescriptions, comments;
+        String appInfo[], appDate, hCard, diagnosis, prescriptions, duration, treatment, comments;
 
-        hCard = request.getParameter("health_card");
+        appInfo = request.getParameter("appointment").split(" - ");
+        appDate = appInfo[1];
+        hCard = appInfo[0];
         diagnosis = request.getParameter("diagnosis");
         prescriptions = request.getParameter("prescriptions");
+        duration = request.getParameter("duration");
+        treatment = request.getParameter("treatment");
         comments = request.getParameter("comments");
 
         EntityManager em = EMF.createEntityManager();
 
-        //em.getTransaction().begin();
+        em.getTransaction().begin();
         
-        Visit v = new Visit();
+        String qstr = "INSERT INTO Visit VALUES (" 
+                + duration + ", '" 
+                + hCard + "', " 
+                + me.getId() + ", '" 
+                + diagnosis + "', '"
+                + prescriptions + "', " 
+                + treatment + ", '" 
+                + comments + "', " 
+                + appDate + ", " 
+                + new Date() + ")";
         
-        v.setComments(comments);
-        v.setDiagnosis(diagnosis);
-        v.setDoctorId(me.getId());
-        //v.setDuration(duration);
+        Query q = em.createQuery(qstr);
         
-        //em.getTransaction().commit();
+        q.executeUpdate();
+        
+        request.setAttribute("ass", qstr);
+        
+        em.getTransaction().commit();
         
         //profile(request, response);
-        request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
+        //request.getRequestDispatcher("/WEB-INF/view/doctor/insert-record.jsp").forward(request, response);
+        insertRecordPage(request, response);
     }
     
     private void searchPage(HttpServletRequest request, HttpServletResponse response)
