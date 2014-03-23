@@ -31,10 +31,10 @@
                 <tbody>
                 <c:forEach var="patient" items="${patientList}">
                     <tr>
-                        <td><a href="${context}/patient/info?healthCard=${patient.healthCard}">${patient.name}</a></td>
-                        <td>${patient.address}</td>
-                        <td>${patient.phoneNumber}</td>
-                        <td>${patient.numberOfVisits}</td>
+                        <td><a href="${context}/patient/info?healthCard=${patient[0]}">${patient[1]}</a></td>
+                        <td>${patient[2]}</a></td>
+                        <td>${patient[3]}</a></td>
+                        <td>${patient[4]}</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>

@@ -8,8 +8,10 @@ package controller;
 
 import entity.*;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -57,6 +59,9 @@ public class doctor extends HttpServlet {
             case "/search": 
                 searchPage(request, response);
                 return;
+            case "/search-do": 
+                doSearch(request, response);
+                return;
             case "/insert": 
                 insertRecord(request, response);
                 return;
@@ -71,13 +76,12 @@ public class doctor extends HttpServlet {
         
         Employee me = (Employee)request.getSession().getAttribute("user");
         
-        TypedQuery<Patient> query = em.createQuery("SELECT p FROM Patient p WHERE p.defaultDoctorId = :id", Patient.class)
-                                        .setParameter("id", me.getId());
+        Query query = em.createNativeQuery("SELECT health_card, name, address, phone_number, number_of_visits FROM Patient WHERE default_doctor_id = ?");
+        query.setParameter(1, me.getId());
         
-        List<Patient> patientList = me.getPatients();
-        List<Patient> patientListDefault = query.getResultList();
+        List patientList = query.getResultList();
         
-        request.setAttribute("patientList", patientListDefault);
+        request.setAttribute("patientList", patientList);
         
         request.getRequestDispatcher(utilities.getView("doctor/home.jsp")).forward(request, response);
     }
@@ -139,6 +143,79 @@ public class doctor extends HttpServlet {
         em.getTransaction().commit();
         
         request.getRequestDispatcher(utilities.getView("doctor/insert-record-result.jsp")).forward(request, response);
+    }
+    
+    private void doSearch(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+                
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        String name, diagnosis, prescriptions, date1, date2, date3, date4, treatment, comments;
+
+        name = request.getParameter("name");
+        diagnosis = request.getParameter("diagnosis");
+        comments = request.getParameter("comments");
+        prescriptions = request.getParameter("prescriptions");
+        date1 = request.getParameter("date1");
+        date2 = request.getParameter("date2");
+        date3 = request.getParameter("date3");
+        date4 = request.getParameter("date4");
+        
+        if (date1 == "")
+            date1 = "2000-01-01";
+        if (date2 == "")
+            date2 = "2100-01-01";
+        if (date3 == "")
+            date3 = "2000-01-01";
+        if (date4 == "")
+            date4 = "2100-01-01";
+        
+        EntityManager em = EMF.createEntityManager();
+        
+        Query search = em.createNativeQuery("SELECT p.name, v.diagnosis, v.prescriptions, v.comments, v.treatment, v.date_and_time FROM "
+                + "Visit v LEFT JOIN Patient p ON v.health_card = p.health_card "
+                + "WHERE p.name LIKE '%?%' AND "
+                + "v.diagnosis LIKE '%?%' AND "
+                + "v.prescriptions LIKE '%?%' AND "
+                + "v.comments LIKE '%?%' AND "
+                + "v.treatment BETWEEN '?' AND '?' AND "
+                + "v.date_and_time BETWEEN '?' AND '?' AND "
+                + "v.doctor_id = ?")
+                .setParameter(1, name)
+                .setParameter(2, diagnosis)
+                .setParameter(3, prescriptions)
+                .setParameter(4, comments)
+                .setParameter(5, date3)
+                .setParameter(6, date4)
+                .setParameter(7, date1)
+                .setParameter(8, date2)
+                .setParameter(9, me.getId());
+        
+        String qstr = "SELECT p.name, v.diagnosis, v.prescriptions, v.comments, v.treatment, v.date_and_time FROM "
+                + "Visit v LEFT JOIN Patient p ON v.health_card = p.health_card "
+                + "WHERE p.name LIKE '%" + name + "%' AND "
+                + "v.diagnosis LIKE '%" + diagnosis + "%' AND "
+                + "v.prescriptions LIKE '%" + prescriptions + "%' AND "
+                + "v.comments LIKE '%" + comments + "%' AND "
+                + "v.treatment BETWEEN '" + date3 + "' AND '" + date4 + "' AND "
+                + "v.date_and_time BETWEEN '" + date1 + "' AND '" + date2 + "' AND "
+                + "v.doctor_id = " + me.getId();
+        
+        search = em.createNativeQuery(qstr);
+        
+        List vResult = search.getResultList();
+        
+        request.setAttribute("vList", vResult);
+        
+        request.setAttribute("name", name);
+        request.setAttribute("diagnosis", diagnosis);
+        request.setAttribute("comments", comments);
+        request.setAttribute("prescriptions", prescriptions);
+        request.setAttribute("date1", request.getParameter("date1"));
+        request.setAttribute("date2", request.getParameter("date2"));
+        request.setAttribute("date3", request.getParameter("date3"));
+        request.setAttribute("date4", request.getParameter("date4"));
+        
+        request.getRequestDispatcher(utilities.getView("doctor/search.jsp")).forward(request, response);
     }
     
     private void searchPage(HttpServletRequest request, HttpServletResponse response)
