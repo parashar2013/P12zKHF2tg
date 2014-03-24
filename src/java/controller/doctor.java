@@ -8,13 +8,11 @@ package controller;
 
 import entity.*;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.TemporalType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +62,9 @@ public class doctor extends HttpServlet {
                 return;
             case "/insert": 
                 insertRecord(request, response);
+                return;
+            case "/give-permission": 
+                givePermission(request, response);
                 return;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -221,6 +222,28 @@ public class doctor extends HttpServlet {
     private void searchPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher(utilities.getView("doctor/search.jsp")).forward(request, response);
+    }
+    
+    private void givePermission(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        
+        String healthCard = (String)request.getParameter("health_card");
+        String otherDoctorId = (String)request.getParameter("doctor_id");
+        
+        em.getTransaction().begin();
+        
+        Query query = em.createNativeQuery("INSERT INTO Doc_Patient (doctor_id, patient_health_card) VALUES (?,?)")
+            .setParameter(1, otherDoctorId)
+            .setParameter(2, healthCard);
+
+        query.executeUpdate();
+        
+        em.getTransaction().commit();
+        
+        response.sendRedirect(request.getContextPath() + "/patient/info?healthCard=" + healthCard);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

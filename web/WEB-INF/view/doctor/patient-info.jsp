@@ -12,12 +12,12 @@
     <jsp:attribute name="title">Patient Record</jsp:attribute>
     
     <jsp:attribute name="nav">
-        <jsp:include page="_nav_tabs.jsp"></jsp:include>
+        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="home" /></jsp:include>
     </jsp:attribute>
     
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <h2 class="page-header">Patient Record for ${patient.name}</h2>
+            <h2 class="page-header">${patient.name} <span style="color: #777; float:right;">Patient Record</span></h2>
             
             <h3 class="sub-header">Patient Info</h3>
             <b>Address:</b> ${patient.address} <br>
@@ -47,23 +47,27 @@
                 </tbody>
             </table>
             
-            <br><br>
+            <br>
             <h3 class="sub-header">Other doctors who have permission to view this patient</h3>
             <ul>
                 <c:forEach var="doctor" items="${doctorsWithPermissionList}">
-                    <li>${doctor.name}</li>
+                    <li>${doctor.name}
+                        <a href="#" title="Revoke permission to view this patient from this doctor">(Revoke)</a>
+                    </li>
                 </c:forEach>
             </ul>
 
-            <form role="form" action="${context}/doctor/add-permission" method="post">
+            <br>
+            <h3 class="sub-header">Give permission to another doctor</h3>
+            <form role="form" action="${context}/doctor/give-permission" method="post">
                 <div class="form-group">
                   <select class="form-control selectpicker" id="doctor_id" name="doctor_id" style="display: inline-block; width: 200px;">
                       <c:forEach var="doctor" items="${doctorsWithoutPermissionList}">
                           <option value="${doctor.id}">${doctor.name}</option>
                       </c:forEach>
                   </select>
-                  
-                  <button style="display: inline; width: 100px;" class="btn btn-block btn-primary" type="submit" id="submit">Add Grant</button>
+                    <input type="hidden" id="health_card" name="health_card" value="${patient.health_card}">
+                  <button style="display: inline; width: 150px;" class="btn btn-block btn-primary" type="submit" id="submit">Give Permission</button>
                 </div>
             </form>
 
