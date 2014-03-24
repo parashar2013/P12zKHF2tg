@@ -17,15 +17,13 @@
     
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <h3>Patient Record for ${patient.name}</h3><hr>
+            <h2 class="page-header">Patient Record for ${patient.name}</h2>
             
-            <h4>Patient Info</h4><br>
-            <!--<div class="patient-info-container">-->
+            <h4>Patient Info</h4>
             <b>Address:</b> ${patient.address} <br>
             <b>Phone Number:</b> ${patient.phoneNumber} <br>
             <b>Default Doctor:</b> ${patient.defaultDoctorName} <br>
             <b>Current Health:</b> ${patient.currentHealth}
-            <!--</div>-->
             <br><br>
             <h4>Past Visits</h4>
             <table class="table">
