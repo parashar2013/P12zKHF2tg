@@ -161,13 +161,13 @@ public class doctor extends HttpServlet {
         date3 = request.getParameter("date3");
         date4 = request.getParameter("date4");
         
-        if (date1 == "")
+        if ("".equals(date1))
             date1 = "2000-01-01";
-        if (date2 == "")
+        if ("".equals(date2))
             date2 = "2100-01-01";
-        if (date3 == "")
+        if ("".equals(date3))
             date3 = "2000-01-01";
-        if (date4 == "")
+        if ("".equals(date4))
             date4 = "2100-01-01";
         
         EntityManager em = EMF.createEntityManager();

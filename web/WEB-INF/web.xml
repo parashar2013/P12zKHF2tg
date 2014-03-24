@@ -29,8 +29,8 @@
         <servlet-class>controller.staff</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>financial_officer</servlet-name>
-        <servlet-class>controller.financial_officer</servlet-class>
+        <servlet-name>FO</servlet-name>
+        <servlet-class>controller.FO</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>java</servlet-name>
@@ -61,8 +61,8 @@
         <url-pattern>/staff/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>financial_officer</servlet-name>
-        <url-pattern>/financial_officer</url-pattern>
+        <servlet-name>FO</servlet-name>
+        <url-pattern>/FO/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

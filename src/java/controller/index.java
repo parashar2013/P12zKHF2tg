@@ -53,7 +53,7 @@ public class index extends HttpServlet {
             }
             else if (emp.getRole().equals("FO"))
             {
-                url = "/financial-officer/home.jsp";
+                url = "/FO/home";
             }
         }
         else if (user.getClass() == Patient.class) {
