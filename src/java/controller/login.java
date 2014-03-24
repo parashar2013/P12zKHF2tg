@@ -51,6 +51,7 @@ public class login extends HttpServlet {
              
         if (login_id == null || password.isEmpty()) {
             sendBackToLoginPage(request, response);
+            return;
         } else {
             if (login_type.equals("employee"))
             {
@@ -62,6 +63,7 @@ public class login extends HttpServlet {
                 
                 if (empList.isEmpty()) {
                     sendBackToLoginPage(request, response);
+                    return;
                 } else {
                     user = empList.get(0);
                 }
