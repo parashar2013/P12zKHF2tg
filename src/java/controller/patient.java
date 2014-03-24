@@ -13,16 +13,17 @@ import entity.Visit;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.EMF;
 import static lib.utilities.getView;
-import org.apache.catalina.tribes.util.Arrays;
+import org.eclipse.persistence.config.QueryHints;
+import org.eclipse.persistence.config.ResultType;
 
 /**
  *
@@ -172,25 +173,32 @@ public class patient extends HttpServlet {
             
             Employee emp = (Employee)user;
 
-            TypedQuery<Patient> query =
-                    em.createQuery("SELECT p FROM Patient p WHERE p.healthCard = :healthCard", Patient.class)
-                      .setParameter("healthCard", healthCard);
+            Query query = em.createNativeQuery("SELECT health_card, p.name AS name, address, phone_number, current_health, e.name AS default_doctor_name "
+                    + "FROM Patient p JOIN Employee e ON p.default_doctor_id = e.id "
+                    + "WHERE p.health_card = ?")
+                .setParameter(1, healthCard);
 
-            List<Patient> patientList = query.getResultList();
-            Query visits = em.createNativeQuery("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time FROM Visit v LEFT JOIN Employee e "
-                    + "ON v.doctor_id = e.id WHERE v.health_card = " + patientList.get(0).getHealthCard());
+            query.setHint(QueryHints.RESULT_TYPE, ResultType.Map); 
+            List patientList = query.getResultList();
+            
+            if (patientList.isEmpty()){
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+            
+            Map patient = (Map)patientList.get(0);
+            
+            Query visits = em.createNativeQuery("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time "
+                    + "FROM Visit v JOIN Employee e "
+                    + "ON v.doctor_id = e.id WHERE v.health_card = ?")
+                .setParameter(1, healthCard);
 
             List visitList = visits.getResultList();
             request.setAttribute("visitList", visitList);
-            
-            if (patientList.isEmpty()) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                return;
-            } else {
-                request.setAttribute("patient", patientList.get(0));
 
-                request.getRequestDispatcher(getView("doctor/patient-info.jsp")).forward(request, response);
-            }
+            request.setAttribute("patient", patient);
+
+            request.getRequestDispatcher(getView("doctor/patient-info.jsp")).forward(request, response);
         }
     }
 

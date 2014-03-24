@@ -21,9 +21,9 @@
             
             <h4>Patient Info</h4>
             <b>Address:</b> ${patient.address} <br>
-            <b>Phone Number:</b> ${patient.phoneNumber} <br>
-            <b>Default Doctor:</b> ${patient.defaultDoctorName} <br>
-            <b>Current Health:</b> ${patient.currentHealth}
+            <b>Phone Number:</b> ${patient.phone_number} <br>
+            <b>Default Doctor:</b> ${patient.default_doctor_name} <br>
+            <b>Current Health:</b> ${patient.current_health}
             <br><br>
             <h4>Past Visits</h4>
             <table class="table">
