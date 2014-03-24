@@ -194,10 +194,34 @@ public class patient extends HttpServlet {
                 .setParameter(1, healthCard);
 
             List visitList = visits.getResultList();
+            
+            
+            //doctors who have permission
+            Query doctorsWithPermission = em.createNativeQuery("SELECT name, id FROM Employee e "
+                    + "WHERE role = 'doctor' AND id != ? "
+                    + "AND e.id IN (SELECT doctor_id FROM Doc_Patient dp "
+                        + "WHERE dp.patient_health_card = ?)")
+                    .setParameter(1, emp.getId())
+                    .setParameter(2, healthCard);
+            
+            doctorsWithPermission.setHint(QueryHints.RESULT_TYPE, ResultType.Map);            
+            List doctorsWithPermissionList = doctorsWithPermission.getResultList();
+            
+            // doctors not already granted permission to this patient
+            Query doctorsWithoutPermission = em.createNativeQuery("SELECT name, id FROM Employee e "
+                + "WHERE role = 'doctor' AND id != ? "
+                + "AND e.id NOT IN (SELECT doctor_id FROM Doc_Patient dp "
+                    + "WHERE dp.patient_health_card = ?)")
+                .setParameter(1, emp.getId())
+                .setParameter(2, healthCard);
+            
+            doctorsWithoutPermission.setHint(QueryHints.RESULT_TYPE, ResultType.Map);            
+            List doctorsWithoutPermissionList = doctorsWithoutPermission.getResultList();
+            
             request.setAttribute("visitList", visitList);
-
+            request.setAttribute("doctorsWithPermissionList", doctorsWithPermissionList);
+            request.setAttribute("doctorsWithoutPermissionList", doctorsWithoutPermissionList);
             request.setAttribute("patient", patient);
-
             request.getRequestDispatcher(getView("doctor/patient-info.jsp")).forward(request, response);
         }
     }

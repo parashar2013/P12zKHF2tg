@@ -19,13 +19,14 @@
         <div class="container" id="content-container">
             <h2 class="page-header">Patient Record for ${patient.name}</h2>
             
-            <h4>Patient Info</h4>
+            <h3 class="sub-header">Patient Info</h3>
             <b>Address:</b> ${patient.address} <br>
             <b>Phone Number:</b> ${patient.phone_number} <br>
             <b>Default Doctor:</b> ${patient.default_doctor_name} <br>
             <b>Current Health:</b> ${patient.current_health}
+            
             <br><br>
-            <h4>Past Visits</h4>
+            <h3 class="sub-header">Past Visits</h3>
             <table class="table">
                 <thead>
                     <tr>
@@ -45,6 +46,26 @@
                 </c:forEach>
                 </tbody>
             </table>
+            
+            <br><br>
+            <h3 class="sub-header">Other doctors who have permission to view this patient</h3>
+            <ul>
+                <c:forEach var="doctor" items="${doctorsWithPermissionList}">
+                    <li>${doctor.name}</li>
+                </c:forEach>
+            </ul>
+
+            <form role="form" action="${context}/doctor/add-permission" method="post">
+                <div class="form-group">
+                  <select class="form-control selectpicker" id="doctor_id" name="doctor_id" style="display: inline-block; width: 200px;">
+                      <c:forEach var="doctor" items="${doctorsWithoutPermissionList}">
+                          <option value="${doctor.id}">${doctor.name}</option>
+                      </c:forEach>
+                  </select>
+                  
+                  <button style="display: inline; width: 100px;" class="btn btn-block btn-primary" type="submit" id="submit">Add Grant</button>
+                </div>
+            </form>
 
         </div>
     </jsp:attribute>
