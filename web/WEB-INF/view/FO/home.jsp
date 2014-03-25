@@ -12,7 +12,7 @@
     <jsp:attribute name="title">Home</jsp:attribute>
     
     <jsp:attribute name="nav">
-        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="doctor" /></jsp:include>
+        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="home" /></jsp:include>
     </jsp:attribute>
     
     <jsp:attribute name="content">

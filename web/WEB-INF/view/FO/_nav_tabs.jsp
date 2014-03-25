@@ -7,17 +7,14 @@
 <%
     String activeTab = request.getParameter("active_tab");
     
-    String dTabClass = "", vTabClass = "";
+    String homeTabClass = "";
     
     if (activeTab != null) {
-        if (activeTab.equals("doctor")){
-            dTabClass = "class='active'";
-        } else if (activeTab.equals("visit")) {
-            vTabClass = "class='active'";
+        if (activeTab.equals("home")){
+            homeTabClass = "class='active'";
         }
     }
     
 %>
 
-<li <%=dTabClass%>><a href="${context}/FO/home">Spy on Doctors</a></li>
-<li <%=vTabClass%>><a href="${context}/FO/visit">Spy on Visits</a></li>
+<li <%=homeTabClass%>><a href="${context}/FO/home">Home</a></li>
