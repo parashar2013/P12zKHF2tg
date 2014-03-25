@@ -1,7 +1,7 @@
 <%-- 
-    Document   : staff_home
-    Created on : Mar 8, 2014, 3:11:09 PM
-    Author     : Parashar
+    Document   : doctor_home.jsp
+    Created on : 24-Mar-2014, 7:52:34 PM
+    Author     : Babanani
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -10,6 +10,9 @@
 
 <t:base_template>
     <jsp:attribute name="title">Home</jsp:attribute>
+    <jsp:attribute name="nav">
+        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="doctor" /></jsp:include>
+    </jsp:attribute>
     <jsp:attribute name="content">
         <div class="container" id="content-container">
             <h3>Doctors</h3>

@@ -10,17 +10,14 @@
     String homeTabClass = "", insertTabClass = "", searchTabClass = "";
     
     if (activeTab != null) {
-        if (activeTab.equals("home")){
+        if (activeTab.equals("doctor")){
             homeTabClass = "class='active'";
-        } else if (activeTab.equals("insert-record")) {
+        } else if (activeTab.equals("patient")) {
             insertTabClass = "class='active'";
-        } else if (activeTab.equals("search")) {
-            searchTabClass = "class='active'";
         }
     }
     
 %>
 
-<li <%=homeTabClass%>><a href="${context}/doctor/home">Current Patients</a></li>
-<li <%=insertTabClass%>><a href="${context}/doctor/insert-record">Insert Record</a></li>
-<li <%=searchTabClass%>><a href="${context}/doctor/search">Search</a></li>
+<li <%=homeTabClass%>><a href="${context}/staff/doctor_home.jsp">Doctors</a></li>
+<li <%=insertTabClass%>><a href="${context}/staff/patient_home.jsp">Patients</a></li>

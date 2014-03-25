@@ -1,7 +1,7 @@
 <%-- 
-    Document   : patients
-    Created on : 19-Mar-2014, 3:51:22 PM
-    Author     : Babanani
+    Document   : staff_home
+    Created on : Mar 8, 2014, 3:11:09 PM
+    Author     : Parashar
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -9,13 +9,16 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
-    <jsp:attribute name="title">Patients for ${doctor}</jsp:attribute>
+    <jsp:attribute name="title">Patients</jsp:attribute>
+    <jsp:attribute name="nav">
+        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="patient" /></jsp:include>
+    </jsp:attribute>
     <jsp:attribute name="content">
         <div class="container" id="button-container">
             <a href="${context}/staff/patient_info.jsp">New Patient</a>
         </div>
         <div class="container" id="content-container">
-            <h3>Patients for ${doctor}</h3><hr>
+            <h3>Patients</h3><hr>
             
             <table class="table">
                 <thead>
@@ -33,7 +36,6 @@
                         <td>${patient.address}</td>
                         <td>${patient.phoneNumber}</td>
                         <td>${patient.numberOfVisits}</td>
-                        <td><a href="${context}/staff/visit_records.jsp?health_card=${patient.healthCard}">Visitation Records</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
