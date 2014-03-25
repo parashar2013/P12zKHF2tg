@@ -6,15 +6,25 @@
 
 package controller;
 
+import entity.AppointmentPK;
 import entity.Employee;
 import entity.Patient;
 import entity.Visit;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -65,6 +75,8 @@ public class staff extends HttpServlet {
                  patientsinfoPage(request,response);
             case "/visit_records.jsp":
                  visitRecordsPage(request,response);
+            case "/delete_appointment":
+                 deleteAppointment(request,response);
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -92,7 +104,7 @@ public class staff extends HttpServlet {
                 patientsPage(request,response);
         }
         
-        List<Patient> patientList=DB.getPatients();
+       // List<Patient> patientList=DB.getPatients();
         List<Employee> doctorList = DB.getDoctorsByStaffId(me.getId());
         //Employee staff = (Employee)query.getSingleResult();
         //List<Employee> doctorList = query.getResultList();
@@ -127,7 +139,7 @@ public class staff extends HttpServlet {
         List<Object[]> appointmentList = DB.getAppointments(doc_id);
         
         request.setAttribute("appointmentList", appointmentList);
-        request.setAttribute("doctor", doc.getName());
+        request.setAttribute("doctor", doc);
         request.getRequestDispatcher("/WEB-INF/view/staff/appointments.jsp").forward(request, response);
     }  
          private void patientsinfoPage(HttpServletRequest request, HttpServletResponse response)
@@ -207,6 +219,22 @@ public class staff extends HttpServlet {
               request.setAttribute("patient", DB.getPatientByHealthCard(health_card).getName());
               request.getRequestDispatcher(page).forward(request, response);
           }        
+          
+          private void deleteAppointment(HttpServletRequest request, HttpServletResponse response)
+                 throws ServletException, IOException,ClassNotFoundException,SQLException{
+              String health_card=request.getParameter("health_card").isEmpty()?null:request.getParameter("health_card");
+              String date_and_time_string=request.getParameter("date_and_time").isEmpty()?null:request.getParameter("date_and_time");
+              try{
+                  Date date_and_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH).parse(date_and_time_string);
+                  AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
+                  DB.deleteAppointment(app_pk);
+                  appointmentsPage(request,response);
+              }
+              catch(ParseException e)
+              {
+                  response.sendError(HttpServletResponse.SC_NOT_FOUND,"ParseException thrown" + e.getMessage());
+              }
+          }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

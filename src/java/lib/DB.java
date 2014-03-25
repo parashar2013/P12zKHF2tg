@@ -6,6 +6,7 @@
 
 package lib;
 
+import entity.AppointmentPK;
 import entity.Employee;
 import entity.Patient;
 import entity.Visit;
@@ -325,7 +326,7 @@ public class DB {
                 Object[] list = {
                         resultSet.getString("health_card"),
                         resultSet.getString("name"),
-                        resultSet.getString("address")
+                        resultSet.getString("date_and_time")
                 };
                 ret.add(list);
             }
@@ -376,4 +377,27 @@ public class DB {
             }
         }
     }     
+      
+      public static void deleteAppointment(AppointmentPK app_pk)             
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        Patient ret = null;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement(
+                    String.format("DELETE FROM Appointment WHERE health_card=%s AND DATE(date_and_time)=?;",app_pk.getHealthCard())
+            );
+            pstmt.setDate(1, new java.sql.Date(app_pk.getDateAndTime().getTime()));
+            pstmt.executeUpdate();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }      
 }

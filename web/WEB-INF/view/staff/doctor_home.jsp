@@ -20,8 +20,8 @@
                 <c:forEach var="doctor" items="${doctorList}">
                     <li>
                         ${doctor.name}
-                        <a href="${context}/staff/home?doctor_id=${doctor.id}&pg=patients">Patients</a>
-                        <a href="${context}/staff/home?doctor_id=${doctor.id}&pg=appointments">Appointments</a>
+                        <a href="${context}/staff/patient_home.jsp?doctor_id=${doctor.id}&pg=patients">Patients</a>
+                        <a href="${context}/staff/doctor_home.jsp?doctor_id=${doctor.id}&pg=appointments">Appointments</a>
                     </li>
                 </c:forEach>
             <ul/>

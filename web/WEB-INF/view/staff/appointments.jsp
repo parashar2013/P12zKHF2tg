@@ -11,13 +11,17 @@
 <t:base_template>
     <jsp:attribute name="title">Appointments for ${doctor}</jsp:attribute>
     <jsp:attribute name="content">
+         <div class="container" id="button-container">
+            <a href="${context}/staff/insert_appointment.jsp">New Appointment</a>
+        </div>       
         <div class="container" id="content-container">
-            <h3>Appointments for ${doctor}</h3><hr>
+            <h3>Appointments for ${doctor.name}</h3><hr>
             
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Patient health Card</th>
+                        <th>Patient Health Card</th>
+                        <th>Patient Name</th>
                         <th>Date and Time</th>
                     </tr>
                 </thead>
@@ -26,6 +30,8 @@
                     <tr>
                         <td>${appointment[0]}</td>
                         <td>${appointment[1]}</td>
+                        <td>${appointment[2]}</td>
+                        <td><a href="${context}/staff/delete_appointment?health_card=${appointment[0]}&date_and_time=${appointment[2]}&doctor_id=${doctor.id}">Delete</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
