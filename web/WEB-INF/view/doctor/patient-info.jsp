@@ -52,7 +52,8 @@
             <ul>
                 <c:forEach var="doctor" items="${doctorsWithPermissionList}">
                     <li>${doctor.name}
-                        <a href="#" title="Revoke permission to view this patient from this doctor">(Revoke)</a>
+                        <a href="${context}/doctor/revoke-permission?health_card=${patient.health_card}&doctor_id=${doctor.id}"
+                           title="Revoke permission to view this patient from this doctor">(Revoke)</a>
                     </li>
                 </c:forEach>
             </ul>

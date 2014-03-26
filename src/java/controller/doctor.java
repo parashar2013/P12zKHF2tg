@@ -66,6 +66,9 @@ public class doctor extends HttpServlet {
             case "/give-permission": 
                 givePermission(request, response);
                 return;
+            case "/revoke-permission": 
+                revokePermission(request, response);
+                return;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -77,8 +80,9 @@ public class doctor extends HttpServlet {
         
         Employee me = (Employee)request.getSession().getAttribute("user");
         
-        Query query = em.createNativeQuery("SELECT health_card, name, address, phone_number, number_of_visits FROM Patient WHERE default_doctor_id = ?");
-        query.setParameter(1, me.getId());
+        Query query = em.createNativeQuery("SELECT health_card, name, address, phone_number, number_of_visits "
+                + "FROM Patient WHERE default_doctor_id = ?")
+            .setParameter(1, me.getId());
         
         List patientList = query.getResultList();
         
@@ -99,8 +103,7 @@ public class doctor extends HttpServlet {
                 + "JOIN Patient p ON (p.health_card = dp.patient_health_card)"
                 + "NATURAL JOIN Appointment a "
                 + "WHERE dp.doctor_id = ?")
-                .setParameter(1, me.getId())
-                .setParameter(2, me.getId());
+                .setParameter(1, me.getId());
         
         List results = query.getResultList();
         
@@ -237,6 +240,29 @@ public class doctor extends HttpServlet {
         
         Query query = em.createNativeQuery("INSERT INTO Doc_Patient (doctor_id, patient_health_card) VALUES (?,?)")
             .setParameter(1, otherDoctorId)
+            .setParameter(2, healthCard);
+
+        query.executeUpdate();
+        
+        em.getTransaction().commit();
+        
+        response.sendRedirect(request.getContextPath() + "/patient/info?healthCard=" + healthCard);
+    }
+    
+    // Revoke permission to view patient from another doctor
+    private void revokePermission(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = EMF.createEntityManager();
+        
+        Employee me = (Employee)request.getSession().getAttribute("user");
+        
+        String healthCard = (String)request.getParameter("health_card");
+        String doctorId = (String)request.getParameter("doctor_id");
+        
+        em.getTransaction().begin();
+        
+        Query query = em.createNativeQuery("DELETE FROM Doc_Patient WHERE doctor_id = ? AND patient_health_card = ?")
+            .setParameter(1, doctorId)
             .setParameter(2, healthCard);
 
         query.executeUpdate();
