@@ -266,12 +266,13 @@ public class staff extends HttpServlet {
                       int hour = request.getParameter("hour")==null?null:request.getParameter("hour").isEmpty()?null:parseInt(request.getParameter("hour"));
                       int minute = request.getParameter("minute")==null?null:request.getParameter("minute").isEmpty()?null:parseInt(request.getParameter("minute"));
                       String date_and_time_string = String.format("%4d-%2d-%2d %2d:%2d:00.000",year,month,day,hour,minute);
-                      
+                      System.out.println(date_and_time_string);
                       DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
                       FORMATTER.setLenient(false);
                       Date date_and_time = FORMATTER.parse(date_and_time_string);
-                      Date today = new Date();
-                      AppointmentPK app_pk = new AppointmentPK(health_card,new Date(today.getTime()));
+                      System.out.println(date_and_time);
+                      //Date today = new Date();
+                      AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
                       DB.insertAppointment(app_pk,doc_id);
                       appointmentsPage(request,response);
                   }

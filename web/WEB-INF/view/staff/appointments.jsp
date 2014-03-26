@@ -12,7 +12,7 @@
     <jsp:attribute name="title">Appointments for ${doctor}</jsp:attribute>
     <jsp:attribute name="content">
          <div class="container" id="button-container">
-            <a href="${context}/staff/insert_appointment.jsp">New Appointment</a>
+            <a href="${context}/staff/insert_appointment.jsp?doctor_id=${doctor.id}">New Appointment</a>
         </div>       
         <div class="container" id="content-container">
             <h3>Appointments for ${doctor.name}</h3><hr>

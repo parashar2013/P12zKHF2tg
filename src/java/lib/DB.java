@@ -377,19 +377,42 @@ public class DB {
             }
         }
     }     
-      
+      public static void insertAppointment(AppointmentPK app_pk, int doctor_id)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            System.out.println(app_pk.getDateAndTime().getTime());
+            PreparedStatement pstmt = con.prepareStatement(
+                    String.format("INSERT INTO Appointment VALUES('%s',%d,?);",app_pk.getHealthCard(),doctor_id)
+            );
+            pstmt.setTimestamp(1, new Timestamp(app_pk.getDateAndTime().getTime()));
+            System.out.println(pstmt);
+            pstmt.executeUpdate();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    } 
       public static void deleteAppointment(AppointmentPK app_pk)             
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
-        Patient ret = null;
         try {
             con = getConnection();
             stmt = con.createStatement();
             PreparedStatement pstmt = con.prepareStatement(
                     String.format("DELETE FROM Appointment WHERE health_card=%s AND DATE(date_and_time)=?;",app_pk.getHealthCard())
             );
-            pstmt.setDate(1, new java.sql.Date(app_pk.getDateAndTime().getTime()));
+            
+            pstmt.setTimestamp(1, new Timestamp(app_pk.getDateAndTime().getTime()));
+            System.out.println(pstmt);
             pstmt.executeUpdate();
         } finally {
             if (stmt != null) {
