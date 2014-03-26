@@ -408,7 +408,7 @@ public class DB {
             con = getConnection();
             stmt = con.createStatement();
             PreparedStatement pstmt = con.prepareStatement(
-                    String.format("DELETE FROM Appointment WHERE health_card=%s AND DATE(date_and_time)=?;",app_pk.getHealthCard())
+                    String.format("DELETE FROM Appointment WHERE health_card='%s' AND date_and_time=?;",app_pk.getHealthCard())
             );
             
             pstmt.setTimestamp(1, new Timestamp(app_pk.getDateAndTime().getTime()));
