@@ -4,19 +4,17 @@
     Author     : Parashar
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
     <jsp:attribute name="scripts">
     <script>
         $(function() {
-          $( "#treatment" ).datepicker();
+          $("#treatment").datepicker();
         });
     </script>
-
-        
     </jsp:attribute>
     
     <jsp:attribute name="title">Insert Record</jsp:attribute>
@@ -52,7 +50,6 @@
               <div class="form-group">
                 <label for="diagnosis">Scheduling of Treatment</label>
                 <input type="text" class="form-control" id="treatment" name="treatment">
-                <!--<input type="date" class="form-control" id="treatment" name="treatment">-->
               </div>
               <div class="form-group">
                 <label for="comments">Comments (not visible to patient)</label>
