@@ -9,6 +9,16 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
+    <jsp:attribute name="scripts">
+    <script>
+        $(function() {
+          $( "#treatment" ).datepicker();
+        });
+    </script>
+
+        
+    </jsp:attribute>
+    
     <jsp:attribute name="title">Insert Record</jsp:attribute>
     
     <jsp:attribute name="nav">
@@ -41,7 +51,8 @@
               </div>
               <div class="form-group">
                 <label for="diagnosis">Scheduling of Treatment</label>
-                <input type="date" class="form-control" id="treatment" name="treatment">
+                <input type="text" class="form-control" id="treatment" name="treatment">
+                <!--<input type="date" class="form-control" id="treatment" name="treatment">-->
               </div>
               <div class="form-group">
                 <label for="comments">Comments (not visible to patient)</label>

@@ -65,3 +65,7 @@ body {
 .page-header {
     margin: 20px 0 20px;
 }
+
+.ui-datepicker table {
+    font-size: 10px;
+}
