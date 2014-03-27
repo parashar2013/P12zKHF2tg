@@ -95,8 +95,11 @@ public class patient extends HttpServlet {
         EntityManager em = EMF.createEntityManager();
         
         Patient me = (Patient)request.getSession().getAttribute("user");
+        String hCard = me.getHealthCard();
         
-        request.setAttribute("patientProfile", me);
+        Query q = em.createNativeQuery("SELECT * FROM Patient WHERE health_card = '" + hCard + "'");
+        
+        request.setAttribute("patientProfile", q.getSingleResult());
         
         request.getRequestDispatcher(getView("patient/profile.jsp")).forward(request, response);
     }
@@ -120,39 +123,17 @@ public class patient extends HttpServlet {
 
         em.getTransaction().begin();
         
-        Query update = em.createQuery("UPDATE Patient p SET p.address = :address, "
-                + "p.currentHealth = :curHealth, "
-                + "p.defaultDoctorId = :defaultDoctorId, "
-                + "p.name = :name, "
-                + "p.numberOfVisits = :numVisits, "
-                + "p.password = :pw, "
-                + "p.phoneNumber = :phone, "
-                + "p.sinNumber = :SIN "
-                + "WHERE p.healthCard = :hCard", Patient.class)
-                .setParameter("name", name)
-                .setParameter("hCard", hCard)
-                .setParameter("address", address)
-                .setParameter("phone", phone)
-                .setParameter("SIN", parseInt(SIN))
-                .setParameter("numVisits", parseInt(numVisits))
-                .setParameter("defaultDoctorId", parseInt(defaultDoctorId))
-                .setParameter("curHealth", curHealth)
-                .setParameter("pw", pw);
+        Query update = em.createNativeQuery("UPDATE Patient SET address = '" + address + "', "
+                + "current_health = '" + curHealth + "', "
+                + "default_doctor_id = " + parseInt(defaultDoctorId) + ", "
+                + "name = '" + name + "', "
+                + "number_of_visits = " + parseInt(numVisits) + ", "
+                + "password = '" + pw + "', "
+                + "phone_number = '" + phone + "', "
+                + "sin_number = " + parseInt(SIN) + " "
+                + "WHERE health_card = '" + hCard + "'");
         
         int rowcount = update.executeUpdate();
-        
-        if (rowcount == 1) {
-            Patient me = (Patient)request.getSession().getAttribute("user");
-            me.setAddress(address);
-            me.setCurrentHealth(curHealth);
-            me.setDefaultDoctorId(parseInt(defaultDoctorId));
-            me.setHealthCard(hCard);
-            me.setName(name);
-            me.setNumberOfVisits(parseInt(numVisits));
-            me.setPassword(pw);
-            me.setPhoneNumber(phone);
-            me.setSinNumber(parseInt(SIN));
-        }
         
         request.setAttribute("updateMsg", "Your profile has been updated!<br><br>");
         em.getTransaction().commit();
