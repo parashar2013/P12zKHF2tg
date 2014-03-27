@@ -11,6 +11,7 @@ import entity.Employee;
 import entity.Patient;
 import entity.Visit;
 import entity.VisitPK;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
@@ -20,10 +21,6 @@ import java.util.*;
  * @author Babanani
  */
 public class DB {
-    
-    public static final String url = "jdbc:mysql://infinity.infinitytech.ca:3306/";
-    public static final String user = "eddie";
-    public static final String pwd = "hwtMEHt6JsjUlwIDyc9e";
     
     public static void testConnection()
             throws ClassNotFoundException, SQLException {
@@ -37,20 +34,22 @@ public class DB {
         }
     }
 
-    public static Connection getConnection()
-            throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection(url, user, pwd);
-        Statement stmt = null;
+    public static Connection getConnection() {
+        Connection con = null;
+        
         try {
-            con.createStatement();
-            stmt = con.createStatement();
-            stmt.execute("USE hospitalDB;");
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
+            Properties properties = new Properties();
+            properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("db.properties"));
+
+            final String url = properties.getProperty("url");
+            final String user = properties.getProperty("user");
+            final String pwd = properties.getProperty("password");
+            
+            con = DriverManager.getConnection(url, user, pwd);
+        } catch (SQLException | IOException e) {
+            
         }
+
         return con;
     }    
     
