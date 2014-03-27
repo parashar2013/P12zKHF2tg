@@ -45,9 +45,10 @@ public class DB {
             final String user = properties.getProperty("user");
             final String pwd = properties.getProperty("password");
             
+            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, user, pwd);
-        } catch (SQLException | IOException e) {
-            
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
         return con;
