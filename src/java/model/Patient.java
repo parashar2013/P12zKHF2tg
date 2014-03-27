@@ -19,7 +19,31 @@ import lib.utilities;
  * @author Parashar
  */
 public class Patient {
-    
+    private
+            String healthCard;
+            private String name;
+            private String address;
+            private String phoneNumber;
+            private int sinNumber;
+            private int numberOfVisits;
+            private int defaultDoctorId;
+            private String currentHealth;
+            private String password;
+            
+        
+    public Patient(String health_card,String name, String address, String phone_number,int sin_number,
+            int number_of_visits,int default_doctor_id,String current_health,String password)
+    {
+        this.healthCard = health_card;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phone_number;
+        this.sinNumber = sin_number;
+        this.numberOfVisits = number_of_visits;
+        this.defaultDoctorId = default_doctor_id;
+        this.currentHealth = current_health;
+        this.password = password;        
+    }
     public static List<Map<String, Object>> getPatientsByDefaultDoctorId(String idString) {
         List<Map<String, Object>> patients = new ArrayList<>();
         
@@ -62,5 +86,131 @@ public class Patient {
         }
         
         return patients;
+    }
+
+    /**
+     * @return the healthCard
+     */
+    public String getHealthCard() {
+        return healthCard;
+    }
+
+    /**
+     * @param healthCard the healthCard to set
+     */
+    public void setHealthCard(String healthCard) {
+        this.healthCard = healthCard;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /**
+     * @return the phoneNumber
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * @param phoneNumber the phoneNumber to set
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the sinNumber
+     */
+    public int getSinNumber() {
+        return sinNumber;
+    }
+
+    /**
+     * @param sinNumber the sinNumber to set
+     */
+    public void setSinNumber(int sinNumber) {
+        this.sinNumber = sinNumber;
+    }
+
+    /**
+     * @return the numberOfVisits
+     */
+    public int getNumberOfVisits() {
+        return numberOfVisits;
+    }
+
+    /**
+     * @param numberOfVisits the numberOfVisits to set
+     */
+    public void setNumberOfVisits(int numberOfVisits) {
+        this.numberOfVisits = numberOfVisits;
+    }
+
+    /**
+     * @return the defaultDoctorId
+     */
+    public int getDefaultDoctorId() {
+        return defaultDoctorId;
+    }
+
+    /**
+     * @param defaultDoctorId the defaultDoctorId to set
+     */
+    public void setDefaultDoctorId(int defaultDoctorId) {
+        this.defaultDoctorId = defaultDoctorId;
+    }
+
+    /**
+     * @return the currentHealth
+     */
+    public String getCurrentHealth() {
+        return currentHealth;
+    }
+
+    /**
+     * @param currentHealth the currentHealth to set
+     */
+    public void setCurrentHealth(String currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
