@@ -193,7 +193,7 @@ public class staff extends HttpServlet {
                 }
              }
              else
-                 patientProfile = new Patient();
+                 patientProfile = null;
              
              if(from_patient_info)
                  page="/WEB-INF/view/staff/home.jsp";
@@ -260,8 +260,8 @@ public class staff extends HttpServlet {
                       Date date_and_time = FORMATTER.parse(date_and_time_string);
                       System.out.println(date_and_time);
                       //Date today = new Date();
-                      AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
-                      DB.insertAppointment(app_pk,doc_id);
+                      //AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
+                      DB.insertAppointment(health_card,date_and_time,doc_id);
                       appointmentsPage(request,response);
                   }
                   else
@@ -282,8 +282,8 @@ public class staff extends HttpServlet {
               String date_and_time_string=request.getParameter("date_and_time").isEmpty()?null:request.getParameter("date_and_time");
               try{
                   Date date_and_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH).parse(date_and_time_string);
-                  AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
-                  DB.deleteAppointment(app_pk);
+                  //AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
+                  DB.deleteAppointment(health_card,date_and_time);
                   appointmentsPage(request,response);
               }
               catch(ParseException e)

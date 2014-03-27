@@ -354,7 +354,8 @@ public class DB {
             ret = new ArrayList<>();
             while (resultSet.next()) {
                 Visit v = new Visit( 
-                        new VisitPK(resultSet.getString("health_card"),resultSet.getDate("date_and_time")),
+                        resultSet.getString("health_card"),
+                        resultSet.getDate("date_and_time"),
                         resultSet.getInt("duration"),
                         resultSet.getInt("doctor_id"),
                         resultSet.getString("diagnosis"),
@@ -375,18 +376,18 @@ public class DB {
             }
         }
     }     
-      public static void insertAppointment(AppointmentPK app_pk, int doctor_id)
+      public static void insertAppointment(String health_card,java.util.Date date, int doctor_id)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
         try {
             con = getConnection();
             stmt = con.createStatement();
-            System.out.println(app_pk.getDateAndTime().getTime());
+            System.out.println(date.getTime());
             PreparedStatement pstmt = con.prepareStatement(
-                    String.format("INSERT INTO Appointment VALUES('%s',%d,?);",app_pk.getHealthCard(),doctor_id)
+                    String.format("INSERT INTO Appointment VALUES('%s',%d,?);",health_card,doctor_id)
             );
-            pstmt.setTimestamp(1, new Timestamp(app_pk.getDateAndTime().getTime()));
+            pstmt.setTimestamp(1, new Timestamp(date.getTime()));
             System.out.println(pstmt);
             pstmt.executeUpdate();
         } finally {
@@ -398,7 +399,7 @@ public class DB {
             }
         }
     } 
-      public static void deleteAppointment(AppointmentPK app_pk)             
+      public static void deleteAppointment(String health_card,java.util.Date date)             
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
@@ -406,10 +407,10 @@ public class DB {
             con = getConnection();
             stmt = con.createStatement();
             PreparedStatement pstmt = con.prepareStatement(
-                    String.format("DELETE FROM Appointment WHERE health_card='%s' AND date_and_time=?;",app_pk.getHealthCard())
+                    String.format("DELETE FROM Appointment WHERE health_card='%s' AND date_and_time=?;",health_card)
             );
             
-            pstmt.setTimestamp(1, new Timestamp(app_pk.getDateAndTime().getTime()));
+            pstmt.setTimestamp(1, new Timestamp(date.getTime()));
             System.out.println(pstmt);
             pstmt.executeUpdate();
         } finally {

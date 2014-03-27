@@ -23,6 +23,17 @@ import lib.utilities;
  * @author Parashar
  */
 public class Appointment {
+    
+    private String healthCard;
+    private int doctorId;
+    private Date date;
+    
+    public Appointment(String health_card,int doctor_id,Date date)
+    {
+        this.healthCard = health_card;
+        this.doctorId = doctor_id;
+        this.date = date;
+    }
     public static List<Map<String, Object>> getAppointmentsByDoctorId(String doctorId) {
         List<Map<String, Object>> appointments = new ArrayList<>();
         
@@ -45,5 +56,47 @@ public class Appointment {
         }
         
         return appointments;
+    }
+
+    /**
+     * @return the healthCard
+     */
+    public String getHealthCard() {
+        return healthCard;
+    }
+
+    /**
+     * @param healthCard the healthCard to set
+     */
+    public void setHealthCard(String healthCard) {
+        this.healthCard = healthCard;
+    }
+
+    /**
+     * @return the doctorId
+     */
+    public int getDoctorId() {
+        return doctorId;
+    }
+
+    /**
+     * @param doctorId the doctorId to set
+     */
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    /**
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
