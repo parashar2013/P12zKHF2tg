@@ -12,13 +12,6 @@ import entity.Patient;
 import entity.Visit;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,13 +20,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import javax.persistence.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.DB;
-import lib.EMF;
 
 /**
  *

@@ -26,6 +26,7 @@
                 <input name="hour" type="text">
                 Minute
                 <input name="minute" type="text"> <br>
+                Date <input type="date" name="Date"> <br>
                 <button type="submit" id="submit">Submit</button>
             </form>
         </div>
