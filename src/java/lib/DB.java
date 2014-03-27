@@ -6,11 +6,9 @@
 
 package lib;
 
-import entity.AppointmentPK;
-import entity.Employee;
-import entity.Patient;
-import entity.Visit;
-import entity.VisitPK;
+import model.Employee;
+import model.Patient;
+import model.Visit;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;

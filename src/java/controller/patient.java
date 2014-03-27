@@ -6,10 +6,7 @@
 
 package controller;
 
-import entity.Appointment;
-import entity.Employee;
-import entity.Patient;
-import entity.Visit;
+import model.*;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.util.List;
@@ -22,8 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.EMF;
 import static lib.utilities.getView;
-import org.eclipse.persistence.config.QueryHints;
-import org.eclipse.persistence.config.ResultType;
+import model.User;
 
 /**
  *
@@ -74,12 +70,12 @@ public class patient extends HttpServlet {
             throws ServletException, IOException {
         EntityManager em = EMF.createEntityManager();
         
-        Patient me = (Patient)request.getSession().getAttribute("user");
+        User me = (User)request.getSession().getAttribute("user");
         
         Query apps = em.createNativeQuery("SELECT e.name, a.date_and_time FROM Appointment a LEFT JOIN Employee e "
-                + "ON a.doctor_id = e.id WHERE a.health_card = " + me.getHealthCard());
+                + "ON a.doctor_id = e.id WHERE a.health_card = " + me.getId());
         Query visits = em.createNativeQuery("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time FROM Visit v LEFT JOIN Employee e "
-                + "ON v.doctor_id = e.id WHERE v.health_card = " + me.getHealthCard());
+                + "ON v.doctor_id = e.id WHERE v.health_card = " + me.getId());
         
         List appointmentList = apps.getResultList();
         List visitList = visits.getResultList();
@@ -94,8 +90,8 @@ public class patient extends HttpServlet {
             throws ServletException, IOException {
         EntityManager em = EMF.createEntityManager();
         
-        Patient me = (Patient)request.getSession().getAttribute("user");
-        String hCard = me.getHealthCard();
+        User me = (User)request.getSession().getAttribute("user");
+        String hCard = me.getId();
         
         Query q = em.createNativeQuery("SELECT * FROM Patient WHERE health_card = '" + hCard + "'");
         
@@ -145,66 +141,33 @@ public class patient extends HttpServlet {
             throws ServletException, IOException {
         EntityManager em = EMF.createEntityManager();
         
-        Object user = request.getSession().getAttribute("user");
+        User user = (User)request.getSession().getAttribute("user");
         String healthCard = request.getParameter("healthCard");
         
-        if (user.getClass() == Employee.class) {
+        //if (user.getRole() == "Doctor") {
             // check if patients doctor id == employees id
             // forward to doctors version of patient info page
             
-            Employee emp = (Employee)user;
-
-            Query query = em.createNativeQuery("SELECT health_card, p.name AS name, address, phone_number, current_health, e.name AS default_doctor_name "
-                    + "FROM Patient p JOIN Employee e ON p.default_doctor_id = e.id "
-                    + "WHERE p.health_card = ?")
-                .setParameter(1, healthCard);
-
-            query.setHint(QueryHints.RESULT_TYPE, ResultType.Map); 
-            List patientList = query.getResultList();
+            List patientList = Patient.getPatientsByHealthCard(healthCard);
             
             if (patientList.isEmpty()){
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
+            Map<String, Object> patient = (Map)patientList.get(0);
             
-            Map patient = (Map)patientList.get(0);
+            List<Map<String, Object>> visitList = Visit.getVisitByHealthCard(healthCard);
             
-            Query visits = em.createNativeQuery("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time "
-                    + "FROM Visit v JOIN Employee e "
-                    + "ON v.doctor_id = e.id WHERE v.health_card = ?")
-                .setParameter(1, healthCard);
-
-            List visitList = visits.getResultList();
+            List<Map<String, Object>> doctorsWithPermissionList = Employee.getDoctorsWithPermissionToPatient(user.getId(), healthCard);
             
-            
-            //doctors who have permission
-            Query doctorsWithPermission = em.createNativeQuery("SELECT name, id FROM Employee e "
-                    + "WHERE role = 'doctor' AND id != ? "
-                    + "AND e.id IN (SELECT doctor_id FROM Doc_Patient dp "
-                        + "WHERE dp.patient_health_card = ?)")
-                    .setParameter(1, emp.getId())
-                    .setParameter(2, healthCard);
-            
-            doctorsWithPermission.setHint(QueryHints.RESULT_TYPE, ResultType.Map);            
-            List doctorsWithPermissionList = doctorsWithPermission.getResultList();
-            
-            // doctors not already granted permission to this patient
-            Query doctorsWithoutPermission = em.createNativeQuery("SELECT name, id FROM Employee e "
-                + "WHERE role = 'doctor' AND id != ? "
-                + "AND e.id NOT IN (SELECT doctor_id FROM Doc_Patient dp "
-                    + "WHERE dp.patient_health_card = ?)")
-                .setParameter(1, emp.getId())
-                .setParameter(2, healthCard);
-            
-            doctorsWithoutPermission.setHint(QueryHints.RESULT_TYPE, ResultType.Map);            
-            List doctorsWithoutPermissionList = doctorsWithoutPermission.getResultList();
+            List<Map<String, Object>> doctorsWithoutPermissionList = Employee.getDoctorsWithoutPermissionToPatient(user.getId(), healthCard);
             
             request.setAttribute("visitList", visitList);
             request.setAttribute("doctorsWithPermissionList", doctorsWithPermissionList);
             request.setAttribute("doctorsWithoutPermissionList", doctorsWithoutPermissionList);
             request.setAttribute("patient", patient);
             request.getRequestDispatcher(getView("doctor/patient-info.jsp")).forward(request, response);
-        }
+        //}
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

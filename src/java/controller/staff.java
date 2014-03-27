@@ -6,18 +6,8 @@
 
 package controller;
 
-import entity.AppointmentPK;
-import entity.Employee;
-import entity.Patient;
-import entity.Visit;
+import model.*;
 import java.io.IOException;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseInt;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -27,13 +17,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import javax.persistence.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.DB;
-import lib.EMF;
 
 /**
  *
@@ -99,7 +87,7 @@ public class staff extends HttpServlet {
     
         private void doctorhomePage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException,SQLException {        
-        Employee me = (Employee)request.getSession().getAttribute("user");
+        User me = (User)request.getSession().getAttribute("user");
         String page = request.getParameter("pg");
         
         if(page != null)
@@ -111,7 +99,7 @@ public class staff extends HttpServlet {
         }
         
        // List<Patient> patientList=DB.getPatients();
-        List<Employee> doctorList = DB.getDoctorsByStaffId(me.getId());
+        List<Employee> doctorList = DB.getDoctorsByStaffId(parseInt(me.getId()));
         //Employee staff = (Employee)query.getSingleResult();
         //List<Employee> doctorList = query.getResultList();
         
