@@ -25,10 +25,12 @@
         <!-- CSS -->
         <link rel="stylesheet" href="${context}/css/bootstrap.min.css">
         <link rel="stylesheet" href="${context}/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
         <link rel="stylesheet" href="${context}/css/style.css">
         
         <!-- JS -->
         <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
         <script src="${context}/js/bootstrap.min.js"></script>
         <jsp:invoke fragment="scripts"/>
     

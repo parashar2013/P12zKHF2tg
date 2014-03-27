@@ -6,12 +6,12 @@
 
 package controller;
 
+import model.User;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import entity.*;
 
 /**
  *
@@ -32,32 +32,28 @@ public class index extends HttpServlet {
             throws ServletException, IOException {
         
         String url = "/";
-        Object user = request.getSession().getAttribute("user");
+        User user = (User)request.getSession().getAttribute("user");
         
         if (user == null) {
             url = "/login.jsp";
             request.getServletContext().getRequestDispatcher(url).forward(request, response);
             return;
         }
-        else if (user.getClass() == Employee.class) {
-            Employee emp = (Employee)user;
         
-            if (emp.getRole().equals("Doctor"))
-            {
+        switch (user.getRole()) {
+            case "Doctor":
                 // Send to doctor controller with page set to home
                 url = "/doctor/home";
-            }
-            else if (emp.getRole().equals("Staff"))
-            {
+                break;
+            case "Staff":
                 url = "/staff/home";
-            }
-            else if (emp.getRole().equals("FO"))
-            {
+                break;
+            case "FO":
                 url = "/FO/home";
-            }
-        }
-        else if (user.getClass() == Patient.class) {
-            url = "/patient/home";
+                break;
+            case "Patient":
+                url = "/patient/home";
+                break;
         }
         
         response.sendRedirect(request.getContextPath() + url);

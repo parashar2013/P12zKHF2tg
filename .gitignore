@@ -1,4 +1,5 @@
 /nbproject/private/
 /build/
 src/conf/persistence.xml
+src/conf/db.properties
 /dist/

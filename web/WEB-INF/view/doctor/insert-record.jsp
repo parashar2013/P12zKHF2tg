@@ -4,11 +4,19 @@
     Author     : Parashar
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
+    <jsp:attribute name="scripts">
+    <script>
+        $(function() {
+          $("#treatment").datepicker();
+        });
+    </script>
+    </jsp:attribute>
+    
     <jsp:attribute name="title">Insert Record</jsp:attribute>
     
     <jsp:attribute name="nav">
@@ -22,8 +30,10 @@
               <div class="form-group">
                 <label for="health_card">Appointment</label>
                 <select class="form-control" id="appointment" name="appointment">
-                    <c:forEach var="result" items="${results}">
-                        <option value="${result[1]} - ${result[2]}">${result[0]} - ${result[2]}</option>
+                    <c:forEach var="appt" items="${appointments}">
+                        <option value="${appt.health_card} - ${appt.date_and_time}">
+                            ${appt.name} - ${appt.date_and_time}
+                        </option>
                     </c:forEach>
                 </select>
               </div>
@@ -41,7 +51,7 @@
               </div>
               <div class="form-group">
                 <label for="diagnosis">Scheduling of Treatment</label>
-                <input type="date" class="form-control" id="treatment" name="treatment">
+                <input type="text" class="form-control" id="treatment" name="treatment">
               </div>
               <div class="form-group">
                 <label for="comments">Comments (not visible to patient)</label>

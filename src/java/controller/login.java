@@ -7,18 +7,16 @@
 package controller;
 
 import lib.utilities.*;
-import lib.EMF;
-import entity.Employee;
-import entity.Patient;
+import model.*;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
+import java.sql.*;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.DB;
 
 /**
  *
@@ -38,16 +36,16 @@ public class login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String password, login_type;
-        Integer login_id;
+        String login_id;
         String hCard;
-        Object user = null;
+        User user = null;
         
-        login_id = request.getParameter("login_id").isEmpty() ? null : parseInt(request.getParameter("login_id"));
+        login_id = request.getParameter("login_id").isEmpty() ? null : request.getParameter("login_id");
         //password = utilities.md5(request.getParameter("login_password"));
         password = request.getParameter("login_password");
         login_type = request.getParameter("login_type");
         
-        EntityManager em = EMF.createEntityManager();
+        Connection con = DB.getConnection();
              
         if (login_id == null || password.isEmpty()) {
             sendBackToLoginPage(request, response);
@@ -55,31 +53,48 @@ public class login extends HttpServlet {
         } else {
             if (login_type.equals("employee"))
             {
-                TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.id = :login_id AND e.password = :password", Employee.class)
-                        .setParameter("login_id", login_id)
-                        .setParameter("password", password);
-                
-                List<Employee> empList = query.getResultList();
-                
-                if (empList.isEmpty()) {
-                    sendBackToLoginPage(request, response);
-                    return;
-                } else {
-                    user = empList.get(0);
+                try {
+                    PreparedStatement stmt = con.prepareStatement("SELECT name, id, role FROM Employee WHERE id = ? AND password = ?");
+                    stmt.setInt(1, parseInt(login_id));
+                    stmt.setString(2, password);
+                    ResultSet result = stmt.executeQuery();
+                    
+                    if (result.next()) {
+                        String name = result.getString("name");
+                        String role = result.getString("role");
+                        String id = result.getString("id");
+                        
+                        user = new User(name, role, id);
+                    } else {
+                        sendBackToLoginPage(request, response);
+                        return;
+                    }
+                    
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
             else
             {
-                TypedQuery<Patient> query = em.createQuery("SELECT e FROM Patient e WHERE e.healthCard = :login_id AND e.password = :password", Patient.class)
-                        .setParameter("login_id", request.getParameter("login_id"))
-                        .setParameter("password", password);
-                
-                List<Patient> patientList = query.getResultList();
-                
-                if (patientList.isEmpty()) {
-                    sendBackToLoginPage(request, response);
-                } else {
-                    user = patientList.get(0);
+                try {
+                    PreparedStatement stmt = con.prepareStatement("SELECT name, health_card FROM Patient WHERE health_card = ? AND password = ?");
+                    stmt.setString(1, login_id);
+                    stmt.setString(2, password);
+                    ResultSet result = stmt.executeQuery();
+                    
+                    if (result.next()) {
+                        String name = result.getString("name");
+                        String role = "Patient";
+                        String id = result.getString("health_card");
+                        
+                        user = new User(name, role, id);
+                    } else {
+                        sendBackToLoginPage(request, response);
+                        return;
+                    }
+                    
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }

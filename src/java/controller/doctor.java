@@ -6,17 +6,19 @@
 
 package controller;
 
-import entity.*;
+import model.*;
 import java.io.IOException;
+import java.sql.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.DB;
 import lib.EMF;
 import lib.utilities;
 
@@ -76,45 +78,29 @@ public class doctor extends HttpServlet {
     
     private void homePage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        EntityManager em = EMF.createEntityManager();
+        User me = (User)request.getSession().getAttribute("user");
         
-        Employee me = (Employee)request.getSession().getAttribute("user");
-        
-        Query query = em.createNativeQuery("SELECT health_card, name, address, phone_number, number_of_visits "
-                + "FROM Patient WHERE default_doctor_id = ?")
-            .setParameter(1, me.getId());
-        
-        List patientList = query.getResultList();
+        List<Map<String, Object>> patientList = Patient.getPatientsByDefaultDoctorId(me.getId());
         
         request.setAttribute("patientList", patientList);
-        
         request.getRequestDispatcher(utilities.getView("doctor/home.jsp")).forward(request, response);
     }
     
     private void insertRecordPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        Employee me = (Employee)request.getSession().getAttribute("user");
+        User me = (User)request.getSession().getAttribute("user");
         
-        EntityManager em = EMF.createEntityManager();
+        List<Map<String, Object>> appointments = Appointment.getAppointmentsByDoctorId(me.getId());
         
-        Query query = em.createNativeQuery("SELECT p.name, p.health_card, a.date_and_time "
-                + "FROM Doc_Patient dp "
-                + "JOIN Patient p ON (p.health_card = dp.patient_health_card)"
-                + "NATURAL JOIN Appointment a "
-                + "WHERE dp.doctor_id = ?")
-                .setParameter(1, me.getId());
-        
-        List results = query.getResultList();
-        
-        request.setAttribute("results", results);
+        request.setAttribute("appointments", appointments);
         
         request.getRequestDispatcher(utilities.getView("doctor/insert-record.jsp")).forward(request, response);
     }
     
     private void insertRecord(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        /*
         Employee me = (Employee)request.getSession().getAttribute("user");
         String appInfo[], appDate, hCard, diagnosis, prescriptions, duration, treatment, comments;
 
@@ -147,11 +133,12 @@ public class doctor extends HttpServlet {
         em.getTransaction().commit();
         
         request.getRequestDispatcher(utilities.getView("doctor/insert-record-result.jsp")).forward(request, response);
+    */
     }
     
     private void doSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                
+        /*        
         Employee me = (Employee)request.getSession().getAttribute("user");
         String name, diagnosis, prescriptions, date1, date2, date3, date4, treatment, comments;
 
@@ -220,6 +207,7 @@ public class doctor extends HttpServlet {
         request.setAttribute("date4", request.getParameter("date4"));
         
         request.getRequestDispatcher(utilities.getView("doctor/search.jsp")).forward(request, response);
+        */
     }
     
     private void searchPage(HttpServletRequest request, HttpServletResponse response)
@@ -229,6 +217,7 @@ public class doctor extends HttpServlet {
     
     private void givePermission(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        /*
         EntityManager em = EMF.createEntityManager();
         
         Employee me = (Employee)request.getSession().getAttribute("user");
@@ -247,11 +236,13 @@ public class doctor extends HttpServlet {
         em.getTransaction().commit();
         
         response.sendRedirect(request.getContextPath() + "/patient/info?healthCard=" + healthCard);
+        */
     }
     
     // Revoke permission to view patient from another doctor
     private void revokePermission(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        /*
         EntityManager em = EMF.createEntityManager();
         
         Employee me = (Employee)request.getSession().getAttribute("user");
@@ -270,6 +261,7 @@ public class doctor extends HttpServlet {
         em.getTransaction().commit();
         
         response.sendRedirect(request.getContextPath() + "/patient/info?healthCard=" + healthCard);
+        */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

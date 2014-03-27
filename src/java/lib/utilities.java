@@ -9,6 +9,13 @@ package lib;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -40,5 +47,30 @@ public class utilities {
             e.printStackTrace();
         }
         return md5;
+    }
+    
+    public static List<Map<String, Object>> buildListFromResult(ResultSet result) {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        
+        try {
+            ResultSetMetaData metaData = result.getMetaData();
+            int count = metaData.getColumnCount();
+
+            while (result.next()) {
+                Map<String, Object> resultHash = new HashMap<>();
+
+                // build hash of column name => column value
+                for (int i = 1; i <= count; i++) {
+                    resultHash.put(metaData.getColumnName(i), result.getObject(i));
+                }
+
+                // add to patient list
+                resultList.add(resultHash);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultList;
     }
 }
