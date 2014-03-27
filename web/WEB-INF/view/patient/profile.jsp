@@ -29,7 +29,7 @@
                 Phone Number<br>
                 <input type="text" name="phone" value="${patientProfile[2]}"><br>
                 Health Card<br>
-                <input type="text" name="hCard" value="${patientProfile[3]}"><br>
+                <input type="text" name="hCard" value="${patientProfile[3]}" disabled><br>
                 SIN<br>
                 <input type="text" name="SIN" value="${patientProfile[4]}"><br>
                 Number Of Visits<br>
