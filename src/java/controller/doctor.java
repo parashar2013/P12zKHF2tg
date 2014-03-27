@@ -6,9 +6,7 @@
 
 package controller;
 
-import model.Employee;
-import model.Patient;
-import model.User;
+import model.*;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Date;
@@ -84,32 +82,20 @@ public class doctor extends HttpServlet {
         
         List<Map<String, Object>> patientList = Patient.getPatientsByDefaultDoctorId(me.getId());
         
-
-        
         request.setAttribute("patientList", patientList);
         request.getRequestDispatcher(utilities.getView("doctor/home.jsp")).forward(request, response);
     }
     
     private void insertRecordPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*
-        Employee me = (Employee)request.getSession().getAttribute("user");
         
-        EntityManager em = EMF.createEntityManager();
+        User me = (User)request.getSession().getAttribute("user");
         
-        Query query = em.createNativeQuery("SELECT p.name, p.health_card, a.date_and_time "
-                + "FROM Doc_Patient dp "
-                + "JOIN Patient p ON (p.health_card = dp.patient_health_card)"
-                + "NATURAL JOIN Appointment a "
-                + "WHERE dp.doctor_id = ?")
-                .setParameter(1, me.getId());
+        List<Map<String, Object>> appointments = Appointment.getAppointmentsByDoctorId(me.getId());
         
-        List results = query.getResultList();
-        
-        request.setAttribute("results", results);
+        request.setAttribute("appointments", appointments);
         
         request.getRequestDispatcher(utilities.getView("doctor/insert-record.jsp")).forward(request, response);
-        */
     }
     
     private void insertRecord(HttpServletRequest request, HttpServletResponse response)

@@ -30,8 +30,10 @@
               <div class="form-group">
                 <label for="health_card">Appointment</label>
                 <select class="form-control" id="appointment" name="appointment">
-                    <c:forEach var="result" items="${results}">
-                        <option value="${result[1]} - ${result[2]}">${result[0]} - ${result[2]}</option>
+                    <c:forEach var="appt" items="${appointments}">
+                        <option value="${appt.health_card} - ${appt.date_and_time}">
+                            ${appt.name} - ${appt.date_and_time}
+                        </option>
                     </c:forEach>
                 </select>
               </div>
