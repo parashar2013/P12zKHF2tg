@@ -20,7 +20,7 @@
             <form action="${context}/patient/updateProfile" method="get">
                 <h3>Update Profile</h3><hr>
                 
-                ${updateMsg}
+                ${congrats}
                 
                 Name<br>
                 <input type="text" name="name" value="${patientProfile[0]}"><br>
@@ -29,15 +29,15 @@
                 Phone Number<br>
                 <input type="text" name="phone" value="${patientProfile[2]}"><br>
                 Health Card<br>
-                <input type="text" name="hCard" value="${patientProfile[3]}" disabled><br>
+                <input type="text" name="hCard" value="${patientProfile[3]}" readonly><br>
                 SIN<br>
-                <input type="text" name="SIN" value="${patientProfile[4]}"><br>
+                <input type="text" name="SIN" value="${patientProfile[4]}" readonly><br>
                 Number Of Visits<br>
-                <input type="text" name="numVisits" value="${patientProfile[5]}"><br>
+                <input type="text" name="numVisits" value="${patientProfile[5]}" readonly><br>
                 Default Doctor Id<br>
-                <input type="text" name="defaultDoctorId" value="${patientProfile[6]}"><br>
+                <input type="text" name="defaultDoctorId" value="${patientProfile[6]}" readonly><br>
                 Current Health<br>
-                <input type="text" name="curHealth" value="${patientProfile[7]}"><br>
+                <input type="text" name="curHealth" value="${patientProfile[7]}" readonly><br>
                 Password<br>
                 <input type="text" name="pw" value="${patientProfile[8]}"><br><br>
                 

@@ -9,14 +9,18 @@ package controller;
 import model.*;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.DB;
 import lib.EMF;
 import static lib.utilities.getView;
 import model.User;
@@ -103,36 +107,25 @@ public class patient extends HttpServlet {
     private void updateProfile(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String name, hCard, address, phone, SIN, numVisits, defaultDoctorId, curHealth, pw;
+        String name, hCard, address, phone, curHealth, pw;
+        int SIN, numVisits, defaultDoctorId;
 
         name = request.getParameter("name");
         hCard = request.getParameter("hCard");
         address = request.getParameter("address");
         phone = request.getParameter("phone");
-        SIN = request.getParameter("SIN");
-        numVisits = request.getParameter("numVisits");
-        defaultDoctorId = request.getParameter("defaultDoctorId");
+        SIN = parseInt(request.getParameter("SIN"));
+        numVisits = parseInt(request.getParameter("numVisits"));
+        defaultDoctorId = parseInt(request.getParameter("defaultDoctorId"));
         curHealth = request.getParameter("curHealth");
         pw = request.getParameter("pw");
-
-        EntityManager em = EMF.createEntityManager();
-
-        em.getTransaction().begin();
         
-        Query update = em.createNativeQuery("UPDATE Patient SET address = '" + address + "', "
-                + "current_health = '" + curHealth + "', "
-                + "default_doctor_id = " + parseInt(defaultDoctorId) + ", "
-                + "name = '" + name + "', "
-                + "number_of_visits = " + parseInt(numVisits) + ", "
-                + "password = '" + pw + "', "
-                + "phone_number = '" + phone + "', "
-                + "sin_number = " + parseInt(SIN) + " "
-                + "WHERE health_card = '" + hCard + "'");
-        
-        int rowcount = update.executeUpdate();
-        
-        request.setAttribute("updateMsg", "Your profile has been updated!<br><br>");
-        em.getTransaction().commit();
+        try {
+            DB.UpdatePatientInfo(hCard, name, address, phone, SIN, numVisits, defaultDoctorId, curHealth, pw);
+            request.setAttribute("congrats", "Your profile has been updated!<br><br>");
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         profile(request, response);
     }
