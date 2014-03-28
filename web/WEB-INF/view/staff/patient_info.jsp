@@ -9,11 +9,16 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
-    <jsp:attribute name="title">Home</jsp:attribute>
+    <jsp:attribute name="title">Patient Info</jsp:attribute>
+    <jsp:attribute name="nav">
+        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="doctor" /></jsp:include>
+    </jsp:attribute>
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <form action="${context}/staff/patient_info.jsp">
+            <form action="${context}/staff/patient_info">
                 <input type="hidden" name="namePage" value="patient_info" />
+                <input type="hidden" name="doctor_id" value="${doctor_id}" />
+                <font color="red">${errorMsg}</font>
                 Name<br>
                 <input type="text" name="name" value="${patientProfile.name}"><br>
                 Health Card<br>
@@ -26,8 +31,12 @@
                 <input type="text" name="sin_number" value="${patientProfile.sinNumber}"><br>
                 Number Of Visits<br>
                 <input type="text" name="number_of_visits" value="${patientProfile.numberOfVisits}"><br>
-                Default Doctor Id<br>
-                <input type="text" name="default_doctor" value="${patientProfile.defaultDoctorId}"><br>
+                Default Doctor<br>
+                <select name="default_doctor">
+                    <c:forEach var="doctor" items="${doctorList}">
+                        <option value="${doctor.id}" <c:if test="${doctor.id == patientProfile.defaultDoctorId}">selected</c:if>>${doctor.name}</option>
+                    </c:forEach>
+                </select><br>
                 Current Health<br>
                 <input type="text" name="current_health" value="${patientProfile.currentHealth}"><br>
                 Password<br>

@@ -16,15 +16,18 @@
     <jsp:attribute name="content">
         <div class="container" id="content-container">
             <h3>Doctors</h3>
-            <ul>
+            <table class="table">
+                <tbody>
                 <c:forEach var="doctor" items="${doctorList}">
-                    <li>
-                        ${doctor.name}
-                        <a href="${context}/staff/patient_home.jsp?doctor_id=${doctor.id}&pg=patients">Patients</a>
-                        <a href="${context}/staff/doctor_home.jsp?doctor_id=${doctor.id}&pg=appointments">Appointments</a>
-                    </li>
+                    <tr>
+                        <td>${doctor.name}</td>
+                        <td><a href="${context}/staff/visit_records?doctor_id=${doctor.id}">Records</a></td>
+                        <td><a href="${context}/staff/patient_home?doctor_id=${doctor.id}&pg=patients">Patients</a></td>
+                        <td><a href="${context}/staff/doctor_home?doctor_id=${doctor.id}&pg=appointments">Appointments</a></td>
+                    </tr>
                 </c:forEach>
-            <ul/>
+                </tbody>
+            </table>
         </div>
     </jsp:attribute>
 </t:base_template>

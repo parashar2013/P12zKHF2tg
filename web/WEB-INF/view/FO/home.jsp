@@ -20,7 +20,7 @@
             <form action="${context}/FO/checkDoctor" method="POST">
                 <select name="doctorId" class="form-control" style="float: left; width: auto;">
                     <c:forEach var="doctor" items="${doctors}">
-                        <option value="${doctor[0]}" <c:if test="${doctor[0] == doctorId}">selected</c:if>>${doctor[1]}</option>
+                        <option value="${doctor.id}" <c:if test="${doctor.id == doctorId}">selected</c:if>>${doctor.name}</option>
                     </c:forEach>
                 </select>
                 <select name="health_card" class="form-control" style="float: left; width: auto;">
@@ -51,9 +51,12 @@
                     <tbody>
                     <c:forEach var="item" items="${summary}">
                         <tr>
-                        <c:forEach var="var" items="${item}">
-                            <td>${var}</td>
-                        </c:forEach>
+                            <td>${item.healthCard}</td>
+                            <td>${item.duration}</td>
+                            <td>${item.diagnosis}</td>
+                            <td>${item.prescriptions}</td>
+                            <td>${item.treatment}</td>
+                            <td>${item.dateAndTime}</td>
                         </tr>
                     </c:forEach>
                     </tbody>

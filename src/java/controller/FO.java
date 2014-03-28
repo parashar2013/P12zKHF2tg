@@ -7,8 +7,12 @@
 package controller;
 
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
@@ -16,8 +20,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.DB;
 import lib.EMF;
 import lib.utilities;
+import model.Employee;
+import model.Visit;
 
 /**
  *
@@ -43,28 +50,34 @@ public class FO extends HttpServlet {
             return;
         }
         
-        switch (page) {
-            case "/": 
-                homePage(request, response);
-                return;
-            case "/home": 
-                homePage(request, response);
-                return;
-            case "/checkDoctor":
-                doctorInfo(request, response);
-                return;
-            default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        try {
+            switch (page) {
+                case "/":
+                    homePage(request, response);
+                    return;
+                case "/home":
+                    homePage(request, response);
+                    return;
+                case "/checkDoctor":
+                    doctorInfo(request, response);
+                    return;
+                default:
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
+        }
+        catch(ClassNotFoundException e){
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,"ClassNotFoundException thrown" + e.getMessage());
+        }
+        catch(SQLException e)
+        {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,"SQLException thrown" + e.getMessage());
         }
     }
     
     private void homePage(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        EntityManager em = EMF.createEntityManager();
+            throws ServletException, IOException, ClassNotFoundException, SQLException {
         
-        Query q = em.createNativeQuery("SELECT id, name FROM Employee WHERE role = 'Doctor'");
-        
-        List doctors = q.getResultList();
+        List<Employee> doctors = DB.getEmployeesByRole("Doctor");
         
         request.setAttribute("doctors", doctors);
         
@@ -72,7 +85,7 @@ public class FO extends HttpServlet {
     }
     
     private void doctorInfo(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException {
     
         String doctorId, date1, date2, health_card, hcstr;
         
@@ -94,28 +107,15 @@ public class FO extends HttpServlet {
         if ("".equals(date2))
             date2 = "2100-01-01";
         
-        EntityManager em = EMF.createEntityManager();
+        Employee e = DB.getEmployeeById(parseInt(doctorId));
+        String dName = e.getName();
         
-        Query n = em.createNativeQuery("SELECT name FROM Employee WHERE id = ?").setParameter(1, doctorId);
-        String dName = n.getSingleResult().toString();
-        
-        String qstr1 = "SELECT health_card, duration, diagnosis, prescriptions, treatment, date_and_time FROM Visit "
-                + "WHERE doctor_id = " + doctorId + " "
-                + "AND date_and_time BETWEEN '" + date1 + "' AND '" + date2 + "'" + hcstr;
-        
-        String qstr2 = "SELECT DISTINCT health_card FROM Visit WHERE doctor_id = " + doctorId;
-        
-        Query q1 = em.createNativeQuery(qstr1);
-        Query q2 = em.createNativeQuery(qstr2);
-        
-        List summary = q1.getResultList();
-        List patients = q2.getResultList();
+        List<Visit> summary = DB.getFOVisits(doctorId, date1, date2, hcstr);
+        List<String> patients = DB.getDistinctVisits(doctorId);
         
         request.setAttribute("summary", summary);
         request.setAttribute("patients", patients);
         request.setAttribute("dName", dName);
-        
-        request.setAttribute("ass", qstr1);
         
         request.setAttribute("date1", request.getParameter("date1"));
         request.setAttribute("date2", request.getParameter("date2"));

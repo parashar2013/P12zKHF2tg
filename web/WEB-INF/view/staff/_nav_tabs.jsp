@@ -7,17 +7,17 @@
 <%
     String activeTab = request.getParameter("active_tab");
     
-    String homeTabClass = "", insertTabClass = "", searchTabClass = "";
+    String homeTabClass = "", assignTabClass = "";
     
     if (activeTab != null) {
         if (activeTab.equals("doctor")){
             homeTabClass = "class='active'";
-        } else if (activeTab.equals("patient")) {
-            insertTabClass = "class='active'";
+        } else if (activeTab.equals("appointment")) {
+            assignTabClass = "class='active'";
         }
     }
     
 %>
 
-<li <%=homeTabClass%>><a href="${context}/staff/doctor_home.jsp">Doctors</a></li>
-<li <%=insertTabClass%>><a href="${context}/staff/patient_home.jsp">Patients</a></li>
+<li <%=homeTabClass%>><a href="${context}/staff/doctor_home">Doctors</a></li>
+<li <%=assignTabClass%>><a href="${context}/staff/doctor_home">Assign</a></li>
