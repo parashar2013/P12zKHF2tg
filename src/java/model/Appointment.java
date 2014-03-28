@@ -44,7 +44,9 @@ public class Appointment {
                 + "FROM Doc_Patient dp "
                 + "JOIN Patient p ON (p.health_card = dp.patient_health_card)"
                 + "NATURAL JOIN Appointment a "
-                + "WHERE dp.doctor_id = ?");
+                + "WHERE dp.doctor_id = ? "
+                + "AND (p.health_card, dp.doctor_id, a.date_and_time) "
+                    + "NOT IN (SELECT health_card, doctor_id, date_and_time FROM Visit)");
             stmt.setInt(1, parseInt(doctorId));
             
             ResultSet result = stmt.executeQuery();

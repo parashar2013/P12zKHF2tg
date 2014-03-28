@@ -6,10 +6,12 @@
 
 package model;
 
+import static java.lang.Integer.parseInt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +68,32 @@ public class Visit {
         
         return visits;
     }
+    
+    public static void insertVisit(String duration, String hCard, String doctorId, String diagnosis,
+            String prescriptions, String treatment, String comments, String dateAndTime) {
+        
+        Connection con = DB.getConnection();
+        
+        try {
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO Visit VALUES (?,?,?,?,?,?,?,?,?)");
+            stmt.setInt(1, parseInt(duration));
+            stmt.setString(2, hCard);
+            stmt.setInt(3, parseInt(doctorId));
+            stmt.setString(4, diagnosis);
+            stmt.setString(5, prescriptions);
+            stmt.setTimestamp(6, new Timestamp(new Date(treatment).getTime()));
+            stmt.setString(7, comments);
+            stmt.setString(8, dateAndTime);
+            stmt.setTimestamp(9, new Timestamp(new Date().getTime()));
+            
+            stmt.executeUpdate();
+            
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * @return the healthCard

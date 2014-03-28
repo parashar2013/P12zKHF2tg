@@ -46,6 +46,11 @@ public class doctor extends HttpServlet {
             return;
         }
         
+        if (request.getSession().getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath());
+            return;
+        }
+        
         switch (page) {
             case "/": 
                 homePage(request, response);
@@ -100,8 +105,8 @@ public class doctor extends HttpServlet {
     
     private void insertRecord(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*
-        Employee me = (Employee)request.getSession().getAttribute("user");
+        
+        User me = (User)request.getSession().getAttribute("user");
         String appInfo[], appDate, hCard, diagnosis, prescriptions, duration, treatment, comments;
 
         appInfo = request.getParameter("appointment").split(" - ");
@@ -112,28 +117,10 @@ public class doctor extends HttpServlet {
         duration = request.getParameter("duration");
         treatment = request.getParameter("treatment");
         comments = request.getParameter("comments");
-
-        EntityManager em = EMF.createEntityManager();
-
-        em.getTransaction().begin();
         
-        Query q = em.createNativeQuery("INSERT INTO Visit VALUES (?,?,?,?,?,?,?,?,?)")
-                .setParameter(1, duration)
-                .setParameter(2, hCard)
-                .setParameter(3, me.getId())
-                .setParameter(4, diagnosis)
-                .setParameter(5, prescriptions)
-                .setParameter(6, treatment)
-                .setParameter(7, comments)
-                .setParameter(8, appDate)
-                .setParameter(9, new Date());
-        
-        q.executeUpdate();
-        
-        em.getTransaction().commit();
+        Visit.insertVisit(duration, hCard, me.getId(), diagnosis, prescriptions, treatment, comments, appDate);
         
         request.getRequestDispatcher(utilities.getView("doctor/insert-record-result.jsp")).forward(request, response);
-    */
     }
     
     private void doSearch(HttpServletRequest request, HttpServletResponse response)
