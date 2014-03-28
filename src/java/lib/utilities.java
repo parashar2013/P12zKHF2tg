@@ -61,7 +61,7 @@ public class utilities {
 
                 // build hash of column name => column value
                 for (int i = 1; i <= count; i++) {
-                    resultHash.put(metaData.getColumnName(i), result.getObject(i));
+                    resultHash.put(metaData.getColumnLabel(i), result.getObject(i));
                 }
 
                 // add to patient list
