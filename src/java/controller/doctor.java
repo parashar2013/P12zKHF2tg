@@ -79,7 +79,7 @@ public class doctor extends HttpServlet {
             throws ServletException, IOException {
         User me = (User)request.getSession().getAttribute("user");
         
-        List<Map<String, Object>> patientList = Patient.getPatientsByDefaultDoctorId(me.getId());
+        List<Map<String, Object>> patientList = Employee.getCurrentPatients(me.getId());
         
         request.setAttribute("patientList", patientList);
         request.getRequestDispatcher(utilities.getView("doctor/home.jsp")).forward(request, response);

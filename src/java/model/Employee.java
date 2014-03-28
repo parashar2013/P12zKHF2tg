@@ -82,6 +82,28 @@ public class Employee {
         
         return doctors;
     }
+    
+    public static List<Map<String, Object>> getCurrentPatients(String doctorId) {
+        List<Map<String, Object>> patients = new ArrayList<>();
+        
+        Connection con = DB.getConnection();
+        
+        try {
+            PreparedStatement stmt = con.prepareStatement("SELECT p.* FROM Doc_Patient dp "
+                    + "JOIN Patient p ON (dp.patient_health_card = p.health_card) "
+                    + "WHERE dp.doctor_id = ?");
+            stmt.setInt(1, parseInt(doctorId));
+            
+            ResultSet result = stmt.executeQuery();
+            patients = utilities.buildListFromResult(result);
+            
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return patients;
+    }
 
     /**
      * @return the id
