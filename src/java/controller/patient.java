@@ -49,6 +49,11 @@ public class patient extends HttpServlet {
             return;
         }
         
+        if (request.getSession().getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath());
+            return;
+        }
+        
         switch (page) {
             case "/": 
                 homePage(request, response);
