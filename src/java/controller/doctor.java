@@ -8,12 +8,17 @@ package controller;
 
 import model.*;
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lib.DB;
 import lib.utilities;
 
 /**
@@ -198,51 +203,45 @@ public class doctor extends HttpServlet {
     
     private void givePermission(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*
-        EntityManager em = EMF.createEntityManager();
-        
-        Employee me = (Employee)request.getSession().getAttribute("user");
         
         String healthCard = (String)request.getParameter("health_card");
         String otherDoctorId = (String)request.getParameter("doctor_id");
         
-        em.getTransaction().begin();
-        
-        Query query = em.createNativeQuery("INSERT INTO Doc_Patient (doctor_id, patient_health_card) VALUES (?,?)")
-            .setParameter(1, otherDoctorId)
-            .setParameter(2, healthCard);
+        try (Connection con = DB.getConnection()) {
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO Doc_Patient (doctor_id, patient_health_card) "
+                    + "VALUES (?,?)");
+            stmt.setInt(1, parseInt(otherDoctorId));
+            stmt.setString(2, healthCard);
 
-        query.executeUpdate();
-        
-        em.getTransaction().commit();
+            stmt.executeUpdate();
+       } catch (SQLException e) {
+            e.printStackTrace();
+       }
         
         response.sendRedirect(request.getContextPath() + "/patient/info?healthCard=" + healthCard);
-        */
     }
     
     // Revoke permission to view patient from another doctor
     private void revokePermission(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*
-        EntityManager em = EMF.createEntityManager();
-        
-        Employee me = (Employee)request.getSession().getAttribute("user");
         
         String healthCard = (String)request.getParameter("health_card");
         String doctorId = (String)request.getParameter("doctor_id");
         
-        em.getTransaction().begin();
+        try (Connection con = DB.getConnection()) {
         
-        Query query = em.createNativeQuery("DELETE FROM Doc_Patient WHERE doctor_id = ? AND patient_health_card = ?")
-            .setParameter(1, doctorId)
-            .setParameter(2, healthCard);
+            PreparedStatement stmt = con.prepareStatement("DELETE FROM Doc_Patient "
+                    + "WHERE doctor_id = ? AND patient_health_card = ?");
+            stmt.setInt(1, parseInt(doctorId));
+            stmt.setString(2, healthCard);
 
-        query.executeUpdate();
+            stmt.executeUpdate();
         
-        em.getTransaction().commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         
         response.sendRedirect(request.getContextPath() + "/patient/info?healthCard=" + healthCard);
-        */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
