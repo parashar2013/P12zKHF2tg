@@ -72,7 +72,7 @@ public class Patient {
         Connection con = DB.getConnection();
         
         try {
-            PreparedStatement stmt = con.prepareStatement("SELECT health_card, p.name AS name, address, phone_number, current_health, e.name AS default_doctor_name "
+            PreparedStatement stmt = con.prepareStatement("SELECT health_card, p.name AS name, address, default_doctor_id, phone_number, current_health, e.name AS default_doctor_name "
                     + "FROM Patient p JOIN Employee e ON p.default_doctor_id = e.id "
                     + "WHERE p.health_card = ?");
             stmt.setString(1, healthCard);

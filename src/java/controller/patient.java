@@ -154,6 +154,8 @@ public class patient extends HttpServlet {
             }
             Map<String, Object> patient = (Map)patientList.get(0);
             
+            boolean isDefaultDoctor = patient.get("default_doctor_id").equals(parseInt(user.getId()));
+            
             List<Map<String, Object>> visitList = Visit.getVisitByHealthCard(healthCard);
             
             List<Map<String, Object>> doctorsWithPermissionList = Employee.getDoctorsWithPermissionToPatient(user.getId(), healthCard);
@@ -164,6 +166,7 @@ public class patient extends HttpServlet {
             request.setAttribute("doctorsWithPermissionList", doctorsWithPermissionList);
             request.setAttribute("doctorsWithoutPermissionList", doctorsWithoutPermissionList);
             request.setAttribute("patient", patient);
+            request.setAttribute("isDefaultDoctor", isDefaultDoctor);
             request.getRequestDispatcher(getView("doctor/patient-info.jsp")).forward(request, response);
         //}
     }

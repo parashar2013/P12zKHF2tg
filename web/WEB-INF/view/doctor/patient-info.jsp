@@ -53,25 +53,32 @@
             <ul>
                 <c:forEach var="doctor" items="${doctorsWithPermissionList}">
                     <li>${doctor.name}
+                        <c:if test="${isDefaultDoctor}">
                         <a href="${context}/doctor/revoke-permission?health_card=${patient.health_card}&doctor_id=${doctor.id}"
                            title="Revoke permission to view this patient from this doctor">(Revoke)</a>
+                        </c:if>
                     </li>
                 </c:forEach>
             </ul>
 
             <br>
-            <h3 class="sub-header">Give permission to another doctor</h3>
-            <form role="form" action="${context}/doctor/give-permission" method="post">
-                <div class="form-group">
-                  <select class="form-control selectpicker" id="doctor_id" name="doctor_id" style="display: inline-block; width: 200px;">
-                      <c:forEach var="doctor" items="${doctorsWithoutPermissionList}">
-                          <option value="${doctor.id}">${doctor.name}</option>
-                      </c:forEach>
-                  </select>
-                    <input type="hidden" id="health_card" name="health_card" value="${patient.health_card}">
-                  <button style="display: inline; width: 150px;" class="btn btn-block btn-primary" type="submit" id="submit">Give Permission</button>
-                </div>
-            </form>
+            <h3 class="sub-header">Give permission to another doctor ${isDefaultDoctor}</h3>
+            <c:if test="${isDefaultDoctor}">
+                <form role="form" action="${context}/doctor/give-permission" method="post">
+                    <div class="form-group">
+                      <select class="form-control selectpicker" id="doctor_id" name="doctor_id" style="display: inline-block; width: 200px;">
+                          <c:forEach var="doctor" items="${doctorsWithoutPermissionList}">
+                              <option value="${doctor.id}">${doctor.name}</option>
+                          </c:forEach>
+                      </select>
+                        <input type="hidden" id="health_card" name="health_card" value="${patient.health_card}">
+                      <button style="display: inline; width: 150px;" class="btn btn-block btn-primary" type="submit" id="submit">Give Permission</button>
+                    </div>
+                </form>
+            </c:if>
+            <c:if test="${not isDefaultDoctor}">
+                <div>Only the default doctor can grant permissions</div>
+            </c:if>
 
         </div>
     </jsp:attribute>
