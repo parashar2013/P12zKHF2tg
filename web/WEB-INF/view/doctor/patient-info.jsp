@@ -62,7 +62,7 @@
             </ul>
 
             <br>
-            <h3 class="sub-header">Give permission to another doctor ${isDefaultDoctor}</h3>
+            <h3 class="sub-header">Give permission to another doctor</h3>
             <c:if test="${isDefaultDoctor}">
                 <form role="form" action="${context}/doctor/give-permission" method="post">
                     <div class="form-group">
