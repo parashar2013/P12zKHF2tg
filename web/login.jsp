@@ -19,15 +19,15 @@
 
                 <div class="btn-group" data-toggle="buttons" id="doctor-patient-buttons">
                     <label class="btn btn-primary active">
-                      <input type="radio" class="radio" name="login_type" id="login_patient" value="patient"> Patient
+                      <input type="radio" class="radio" name="login_type" id="login_patient" value="patient" checked> Patient
                     </label>
                     <label class="btn btn-primary">
-                      <input type="radio" class="radio" name="login_type" id="login_doctor" value="employee" checked> Employee
+                      <input type="radio" class="radio" name="login_type" id="login_doctor" value="employee"> Employee
                     </label>
                 </div>
 
-                <input type="text" name="login_id" id="login_id" class="form-control" value="2"> <!--placeholder="Health Card" maxlength="10">-->
-                <input type="text" name="login_password" id="login_password" class="form-control" value="test"> <!--placeholder="Password">-->
+                <input type="text" name="login_id" id="login_id" class="form-control" placeholder="Health Card" maxlength="10">
+                <input type="password" name="login_password" id="login_password" class="form-control" placeholder="Password">
 
                 <label class="checkbox">
                     <input type="checkbox" name="remember_me"> Remember me

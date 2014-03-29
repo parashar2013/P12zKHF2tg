@@ -48,7 +48,7 @@ public class Appointment {
                 + "AND (p.health_card, dp.doctor_id, a.date_and_time) "
                     + "NOT IN (SELECT health_card, doctor_id, date_and_time FROM Visit)");
             stmt.setInt(1, parseInt(doctorId));
-            
+            System.out.println(stmt);
             ResultSet result = stmt.executeQuery();
             appointments = utilities.buildListFromResult(result);
             

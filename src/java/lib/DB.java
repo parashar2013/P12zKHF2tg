@@ -206,6 +206,32 @@ public class DB {
             }
         }
     }
+    public static void Reschedule(String health_card, int doctor_id, String date_and_time, String new_date_and_time)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        Patient ret = null;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            PreparedStatement pstmt = con.prepareStatement( "UPDATE Appointment SET "
+                    + String.format("health_card='%s',",health_card)
+                    + String.format("doctor_id=%d,",doctor_id)
+                    + String.format("date_and_time='%s'",new_date_and_time)
+                    + String.format("WHERE health_card='%s' AND date_and_time = '%s'",health_card, date_and_time)
+            );
+            System.out.println(pstmt);
+            pstmt.executeUpdate();
+            
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
     
     public static ArrayList<Employee> getDoctorsByStaffId(int staff_id)
             throws ClassNotFoundException, SQLException {
@@ -343,6 +369,30 @@ public class DB {
         }
     }
     
+    public static boolean findAppointment(int doctor_id, String health_card, String date_and_time)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        boolean found = false;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(String.format(
+                    "SELECT * FROM Appointment WHERE doctor_id = %d AND health_card = '%s' AND date_and_time = '%s'", doctor_id, health_card, date_and_time
+            ));
+            while (resultSet.next()) {
+                found = true;
+            }
+            return found;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
     public static ArrayList<Object[]> getAppointments(int doctor_id)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
@@ -375,7 +425,7 @@ public class DB {
             }
         }
     }
-    public static ArrayList<Visit> getVisits(String health_card)
+    public static ArrayList<Visit> getVisits(String doctor_id)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
@@ -386,7 +436,45 @@ public class DB {
             ResultSet resultSet = stmt.executeQuery(String.format(
                     
                     
-                    "SELECT * FROM Visit WHERE health_card=%s",health_card
+                    "SELECT * FROM Visit WHERE doctor_id=%s",doctor_id
+            ));
+            ret = new ArrayList<>();
+            while (resultSet.next()) {
+                Visit v = new Visit(
+                        resultSet.getString("health_card"),
+                        resultSet.getDate("date_and_time"),
+                        resultSet.getInt("duration"),
+                        resultSet.getInt("doctor_id"),
+                        resultSet.getString("diagnosis"),
+                        resultSet.getString("prescriptions"),
+                        resultSet.getDate("treatment"),
+                        resultSet.getString("comments"),
+                        resultSet.getDate("last_modified")
+                );
+                ret.add(v);
+            }
+            return ret;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+    public static ArrayList<Visit> getDocVisits(String doctor_id)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        ArrayList<Visit> ret = null;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(String.format(
+                    
+                    
+                    "SELECT * FROM Visit WHERE doctor_id=%s",doctor_id
             ));
             ret = new ArrayList<>();
             while (resultSet.next()) {
@@ -481,18 +569,16 @@ public class DB {
             }
         }
     }
-    public static void insertAppointment(String health_card,java.util.Date date, int doctor_id)
+    public static void insertAppointment(String health_card, String date_and_time, int doctor_id)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
         Statement stmt = null;
         try {
             con = getConnection();
             stmt = con.createStatement();
-            System.out.println(date.getTime());
             PreparedStatement pstmt = con.prepareStatement(
-                    String.format("INSERT INTO Appointment VALUES('%s',%d,?);",health_card,doctor_id)
+                    String.format("INSERT INTO Appointment VALUES('%s',%d,'%s');",health_card,doctor_id, date_and_time)
             );
-            pstmt.setTimestamp(1, new Timestamp(date.getTime()));
             System.out.println(pstmt);
             pstmt.executeUpdate();
         } finally {
@@ -516,6 +602,30 @@ public class DB {
             );
             System.out.println(pstmt);
             pstmt.executeUpdate();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+    public static boolean findDocPatient(String health_card, int doctor_id)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        boolean found = false;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(String.format(
+                    "SELECT * FROM Doc_Patient WHERE doctor_id = %d AND patient_health_card = '%s'", doctor_id, health_card
+            ));
+            while (resultSet.next()) {
+                found = true;
+            }
+            return found;
         } finally {
             if (stmt != null) {
                 stmt.close();

@@ -9,17 +9,19 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
-    <jsp:attribute name="title">Visit Records for ${patient}</jsp:attribute>
+    <jsp:attribute name="title">Visit Records for ${docName}</jsp:attribute>
+    <jsp:attribute name="nav">
+        <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="doctor" /></jsp:include>
+    </jsp:attribute>
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <h3>Visit Records for ${patient}</h3><hr>
+            <h3>Visit Records for ${docName}</h3><hr>
             
             <table class="table">
                 <thead>
                     <tr>
                         <th>Duration</th>
                         <th>Health Card</th>
-                        <th>Doctor Id</th>
                         <th>Diagnosis</th>
                         <th>Prescriptions</th>
                         <th>Treatment</th>
@@ -32,13 +34,12 @@
                 <c:forEach var="visit" items="${visitList}">
                     <tr>
                         <td>${visit.duration}</td>
-                        <td>${visit.visitPK.healthCard}</td>
-                        <td>${visit.doctorId}</td>
+                        <td>${visit.healthCard}</td>
                         <td>${visit.diagnosis}</td>                                            
                         <td>${visit.prescriptions}</td>
                         <td>${visit.treatment}</td>
                         <td>${visit.comments}</td>
-                        <td>${visit.visitPK.dateAndTime}</td>  
+                        <td>${visit.dateAndTime}</td>  
                         <td>${visit.lastModified}</td>                        
                     </tr>
                 </c:forEach>

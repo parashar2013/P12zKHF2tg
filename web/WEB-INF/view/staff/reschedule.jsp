@@ -9,21 +9,18 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base_template>
-    <jsp:attribute name="title">New Appointment</jsp:attribute>
+    <jsp:attribute name="title">Reschedule</jsp:attribute>
     <jsp:attribute name="nav">
         <jsp:include page="_nav_tabs.jsp"><jsp:param name="active_tab" value="doctor" /></jsp:include>
     </jsp:attribute>
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <h3>Insert New Appointment</h3>
-            <form action="${context}/staff/new_appointment?doctor_id=${doctor_id}" method="POST">
+            <h3>Reschedule Appointment</h3>
+            <form action="${context}/staff/reschedule" method="POST">
                 ${errorMsg}
-                Patient<br>
-                <select class="form-control" style="width: auto;" name="health_card">
-                    <c:forEach var="patient" items="${patientList}">
-                        <option value="${patient.health_card}">${patient.health_card} - ${patient.name}</option>
-                    </c:forEach>
-                </select><br>
+                <input type="hidden" name="health_card" value="${health_card}">
+                <input type="hidden" name="doctor_id" value="${doctor_id}">
+                <input type="hidden" name="date_and_time" value="${date_and_time}">
                 Date<br>
                 <input type="date" name="date"> <br>
                 Time<br>

@@ -16,7 +16,7 @@
     <jsp:attribute name="content">
         <div class="container" id="content-container">
             <h3>Appointments for ${doctor.name}</h3><br>
-            <a href="${context}/staff/insert_appointment.jsp?doctor_id=${doctor.id}">New Appointment</a>
+            <a href="${context}/staff/insert_appointment?doctor_id=${doctor.id}">New Appointment</a>
             <hr>
                 
             <table class="table">
@@ -25,6 +25,8 @@
                         <th>Patient Health Card</th>
                         <th>Patient Name</th>
                         <th>Date and Time</th>
+                        <th>Delete</th>
+                        <th>Reschedule</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,6 +36,7 @@
                             <td>${appointment.name}</td>
                             <td>${appointment.date_and_time}</td>
                             <td><a href="${context}/staff/delete_appointment?health_card=${appointment.health_card}&date_and_time=${appointment.date_and_time}&doctor_id=${doctor.id}">Delete</a></td>
+                            <td><a href="${context}/staff/reschedule_page?health_card=${appointment.health_card}&date_and_time=${appointment.date_and_time}&doctor_id=${doctor.id}">Reschedule</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>

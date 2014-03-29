@@ -81,6 +81,18 @@ public class staff extends HttpServlet {
                 case "/new_appointment":
                     insertAppointment(request,response);
                     return;
+                case "/assign_page":
+                    assignPage(request,response);
+                    return;
+                case "/assign":
+                    assign(request,response);
+                    return;
+                case "/reschedule_page":
+                    reschedulePage(request,response);
+                    return;
+                case "/reschedule":
+                    reschedule(request,response);
+                    return;
                 default:
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
@@ -254,12 +266,68 @@ public class staff extends HttpServlet {
     
     private void visitRecordsPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException,ClassNotFoundException,SQLException{
-        String health_card=request.getParameter("health_card").isEmpty()?null:request.getParameter("health_card");
+        String doctor_id=request.getParameter("doctor_id").isEmpty()?null:request.getParameter("doctor_id");
         String page="/WEB-INF/view/staff/visit_records.jsp";
-        List<Visit> visitList = DB.getVisits(health_card);
+        List<Visit> visitList = DB.getVisits(doctor_id);
+        Employee doc = DB.getEmployeeById(parseInt(doctor_id));
+        
+        request.setAttribute("docName", doc.getName());
         request.setAttribute("visitList", visitList);
-        request.setAttribute("patient", DB.getPatientByHealthCard(health_card).getName());
+        
         request.getRequestDispatcher(page).forward(request, response);
+    }
+    private void assignPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException,ClassNotFoundException,SQLException{
+        
+        User me = (User)request.getSession().getAttribute("user");
+        List<Employee> doctorList = DB.getDoctorsByStaffId(parseInt(me.getId()));
+        List<Patient> patientList = DB.getPatients();
+        
+        request.setAttribute("doctorList", doctorList);
+        request.setAttribute("patientList", patientList);
+        
+        request.getRequestDispatcher("/WEB-INF/view/staff/assign.jsp").forward(request, response);
+    }
+    private void assign(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException,ClassNotFoundException,SQLException{
+        
+        int doctor_id;
+        String health_card;
+        
+        doctor_id = parseInt(request.getParameter("doctor_id"));
+        health_card = request.getParameter("patient_id");
+        
+        if (!DB.findDocPatient(health_card, doctor_id))
+            DB.insertDocPatient(health_card, doctor_id);
+        else
+            request.setAttribute("errorMsg","<font color='red'>This entry already exists.</font><br><br>");
+        
+        assignPage(request, response);
+    }
+    private void reschedulePage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException,ClassNotFoundException,SQLException{
+        
+        request.setAttribute("health_card", request.getParameter("health_card"));
+        request.setAttribute("doctor_id", request.getParameter("doctor_id"));
+        request.setAttribute("date_and_time", request.getParameter("date_and_time"));
+        
+        request.getRequestDispatcher("/WEB-INF/view/staff/reschedule.jsp").forward(request, response);
+    }
+    private void reschedule(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException,ClassNotFoundException,SQLException{
+        
+        String date = request.getParameter("date");
+        String time = request.getParameter("time");
+        String date_and_time = request.getParameter("date_and_time");
+        int doctor_id = parseInt(request.getParameter("doctor_id"));
+        String health_card = request.getParameter("health_card");
+        String new_date_and_time = date + " " + time;
+        
+        DB.Reschedule(health_card, doctor_id, date_and_time, new_date_and_time);
+        
+        request.setAttribute("doctor_id",doctor_id);
+        
+        appointmentsPage(request, response);
     }
     
 //          private void insertAppointment(HttpServletRequest request, HttpServletResponse response)
@@ -293,35 +361,45 @@ public class staff extends HttpServlet {
         int doc_id = request.getParameter("doctor_id")==null?null:request.getParameter("doctor_id").isEmpty()?null:parseInt(request.getParameter("doctor_id"));
         String page = "/WEB-INF/view/staff/insert_appointment.jsp";
         request.setAttribute("doctor_id",doc_id);
-        try{
-            if(health_card != null)
-            {
-                int year = request.getParameter("year")==null?null:request.getParameter("year").isEmpty()?null:parseInt(request.getParameter("year"));
-                int month = request.getParameter("month")==null?null:request.getParameter("month").isEmpty()?null:parseInt(request.getParameter("month"));
-                int day = request.getParameter("day")==null?null:request.getParameter("day").isEmpty()?null:parseInt(request.getParameter("day"));
-                int hour = request.getParameter("hour")==null?null:request.getParameter("hour").isEmpty()?null:parseInt(request.getParameter("hour"));
-                int minute = request.getParameter("minute")==null?null:request.getParameter("minute").isEmpty()?null:parseInt(request.getParameter("minute"));
-                String date_and_time_string = String.format("%4d-%2d-%2d %2d:%2d:00.000",year,month,day,hour,minute);
-                System.out.println(date_and_time_string);
-                DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
-                FORMATTER.setLenient(false);
-                Date date_and_time = FORMATTER.parse(date_and_time_string);
-                System.out.println(date_and_time);
-                //Date today = new Date();
-                //AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
-                DB.insertAppointment(health_card,date_and_time,doc_id);
-                appointmentsPage(request,response);
+        
+        List<Map<String, Object>> patientList = Employee.getCurrentPatients(Integer.toString(doc_id));
+        request.setAttribute("patientList", patientList);
+        
+        if(health_card != null)
+        {
+            /*int year = request.getParameter("year")==null?null:request.getParameter("year").isEmpty()?null:parseInt(request.getParameter("year"));
+            int month = request.getParameter("month")==null?null:request.getParameter("month").isEmpty()?null:parseInt(request.getParameter("month"));
+            int day = request.getParameter("day")==null?null:request.getParameter("day").isEmpty()?null:parseInt(request.getParameter("day"));
+            int hour = request.getParameter("hour")==null?null:request.getParameter("hour").isEmpty()?null:parseInt(request.getParameter("hour"));
+            int minute = request.getParameter("minute")==null?null:request.getParameter("minute").isEmpty()?null:parseInt(request.getParameter("minute"));
+            String date_and_time_string = String.format("%4d-%2d-%2d %2d:%2d:00.000",year,month,day,hour,minute);
+            System.out.println(date_and_time_string);
+            DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
+            FORMATTER.setLenient(false);
+            Date date_and_time = FORMATTER.parse(date_and_time_string);
+            System.out.println(date_and_time);*/
+            //Date today = new Date();
+            //AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
+            String dt = request.getParameter("date") + " " + request.getParameter("time");
+            
+            if (request.getParameter("date").equals("") || request.getParameter("time").equals("")) {
+                request.setAttribute("errorMsg","<font color='red'>Please complete all fields properly.</font><br><br>");
+                request.getRequestDispatcher(page).forward(request, response);
             }
-            else
-            {
-                
+            
+            if (!DB.findAppointment(doc_id, health_card, dt)) {
+                DB.insertAppointment(health_card,dt,doc_id);
+                appointmentsPage(request,response);
+            } else {
+                request.setAttribute("errorMsg","<font color='red'>There is another appointment scheduled at this time.</font><br><br>");
                 request.getRequestDispatcher(page).forward(request, response);
             }
         }
-        catch(ParseException e)
+        else
         {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND,"ParseException thrown" + e.getMessage());
+            request.getRequestDispatcher(page).forward(request, response);
         }
+    
     }
     
     private void deleteAppointment(HttpServletRequest request, HttpServletResponse response)
