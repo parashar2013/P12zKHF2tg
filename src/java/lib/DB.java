@@ -425,6 +425,38 @@ public class DB {
             }
         }
     }
+    public static ArrayList<Object[]> getPatientAppointments(String health_card)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        ArrayList<Object[]> ret = null;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(String.format(
+                    
+                    
+                    "SELECT p.health_card,e.name, a.date_and_time FROM Patient p, Appointment a, Employee e WHERE p.health_card=a.health_card AND e.id=a.doctor_id AND a.health_card=%s",health_card
+            ));
+            ret = new ArrayList<>();
+            while (resultSet.next()) {
+                Object[] list = {
+                    resultSet.getString("health_card"),
+                    resultSet.getString("name"),
+                    resultSet.getString("date_and_time")
+                };
+                ret.add(list);
+            }
+            return ret;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
     public static ArrayList<Visit> getVisits(String doctor_id)
             throws ClassNotFoundException, SQLException {
         Connection con = null;
@@ -452,6 +484,39 @@ public class DB {
                         resultSet.getDate("last_modified")
                 );
                 ret.add(v);
+            }
+            return ret;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+    public static ArrayList<Object[]> getPatientVisits(String health_card)
+            throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        Statement stmt = null;
+        ArrayList<Object[]> ret = null;
+        try {
+            con = getConnection();
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(String.format(
+                    
+                    
+                    "SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time FROM Visit v LEFT JOIN Employee e ON v.doctor_id = e.id WHERE v.health_card=%s",health_card
+            ));
+            ret = new ArrayList<>();
+            while (resultSet.next()) {
+                Object[] list = {
+                        resultSet.getString("name"),
+                        resultSet.getString("diagnosis"),
+                        resultSet.getString("prescriptions"),
+                        resultSet.getDate("date_and_time")
+                };
+                ret.add(list);
             }
             return ret;
         } finally {

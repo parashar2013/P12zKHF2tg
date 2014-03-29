@@ -23,23 +23,23 @@
                 ${congrats}
                 
                 Name<br>
-                <input type="text" name="name" value="${patientProfile[0]}"><br>
+                <input type="text" name="name" value="${patientProfile.name}"><br>
                 Address<br>
-                <input type="text" name="address" value="${patientProfile[1]}"><br>
+                <input type="text" name="address" value="${patientProfile.address}"><br>
                 Phone Number<br>
-                <input type="text" name="phone" value="${patientProfile[2]}"><br>
+                <input type="text" name="phone" value="${patientProfile.phoneNumber}"><br>
                 Health Card<br>
-                <input type="text" name="hCard" value="${patientProfile[3]}" readonly><br>
+                <input type="text" name="hCard" value="${patientProfile.healthCard}" readonly><br>
                 SIN<br>
-                <input type="text" name="SIN" value="${patientProfile[4]}" readonly><br>
+                <input type="text" name="SIN" value="${patientProfile.sinNumber}" readonly><br>
                 Number Of Visits<br>
-                <input type="text" name="numVisits" value="${patientProfile[5]}" readonly><br>
+                <input type="text" name="numVisits" value="${patientProfile.numberOfVisits}" readonly><br>
                 Default Doctor Id<br>
-                <input type="text" name="defaultDoctorId" value="${patientProfile[6]}" readonly><br>
+                <input type="text" name="defaultDoctorId" value="${patientProfile.defaultDoctorId}" readonly><br>
                 Current Health<br>
-                <input type="text" name="curHealth" value="${patientProfile[7]}" readonly><br>
+                <input type="text" name="curHealth" value="${patientProfile.currentHealth}" readonly><br>
                 Password<br>
-                <input type="text" name="pw" value="${patientProfile[8]}"><br><br>
+                <input type="text" name="pw" value="${patientProfile.password}"><br><br>
                 
                 <button type="submit" id="submit">Update Profile</button>
             </form>

@@ -81,13 +81,15 @@ public class patient extends HttpServlet {
         
         User me = (User)request.getSession().getAttribute("user");
         
-        Query apps = em.createNativeQuery("SELECT e.name, a.date_and_time FROM Appointment a LEFT JOIN Employee e "
-                + "ON a.doctor_id = e.id WHERE a.health_card = " + me.getId());
-        Query visits = em.createNativeQuery("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time FROM Visit v LEFT JOIN Employee e "
-                + "ON v.doctor_id = e.id WHERE v.health_card = " + me.getId());
+        List<Object[]> appointmentList = null;
+        List<Object[]> visitList = null;
         
-        List appointmentList = apps.getResultList();
-        List visitList = visits.getResultList();
+        try {
+            appointmentList = DB.getPatientAppointments(me.getId());
+            visitList = DB.getPatientVisits(me.getId());
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         request.setAttribute("appointmentList", appointmentList);
         request.setAttribute("visitList", visitList);
@@ -97,14 +99,19 @@ public class patient extends HttpServlet {
     
     private void profile(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        EntityManager em = EMF.createEntityManager();
         
         User me = (User)request.getSession().getAttribute("user");
         String hCard = me.getId();
         
-        Query q = em.createNativeQuery("SELECT * FROM Patient WHERE health_card = '" + hCard + "'");
+        Patient patientProfile = null;
         
-        request.setAttribute("patientProfile", q.getSingleResult());
+        try {
+            patientProfile = DB.getPatientByHealthCard(hCard);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        request.setAttribute("patientProfile", patientProfile);
         
         request.getRequestDispatcher(getView("patient/profile.jsp")).forward(request, response);
     }
@@ -125,13 +132,16 @@ public class patient extends HttpServlet {
         curHealth = request.getParameter("curHealth");
         pw = request.getParameter("pw");
         
-        try {
-            DB.UpdatePatientInfo(hCard, name, address, phone, SIN, numVisits, defaultDoctorId, curHealth, pw);
-            request.setAttribute("congrats", "Your profile has been updated!<br><br>");
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        if (!pw.equals("") && !name.equals("") && !address.equals("") && !phone.equals("")) {
+            try {
+                DB.UpdatePatientInfo(hCard, name, address, phone, SIN, numVisits, defaultDoctorId, curHealth, pw);
+                request.setAttribute("congrats", "Your profile has been updated!<br><br>");
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            request.setAttribute("congrats", "<font color='red'>Please fill in all the fields.</font><br><br>");
         }
-        
         profile(request, response);
     }
     
