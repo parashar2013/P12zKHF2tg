@@ -316,18 +316,36 @@ public class staff extends HttpServlet {
     private void reschedule(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException,ClassNotFoundException,SQLException{
         
-        String date = request.getParameter("date");
-        String time = request.getParameter("time");
-        String date_and_time = request.getParameter("date_and_time");
-        int doctor_id = parseInt(request.getParameter("doctor_id"));
-        String health_card = request.getParameter("health_card");
-        String new_date_and_time = date + " " + time;
-        
-        DB.Reschedule(health_card, doctor_id, date_and_time, new_date_and_time);
-        
-        request.setAttribute("doctor_id",doctor_id);
-        
-        appointmentsPage(request, response);
+            try
+            {
+                String date = request.getParameter("date");
+                String time = request.getParameter("time");
+                String date_and_time = request.getParameter("date_and_time");
+                int doctor_id = parseInt(request.getParameter("doctor_id"));
+                String health_card = request.getParameter("health_card");
+                String new_date_and_time = date + " " + time;
+                SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.ENGLISH);
+                DATEFORMATTER.setLenient(false);
+                System.out.println(new_date_and_time);
+                if(!"".equals(date) && !"".equals(time))
+                {
+                    if(!DATEFORMATTER.parse(new_date_and_time).after(new Date()))
+                        request.setAttribute("errorMsg","<font color='red'>Tried to reschedule to an invalid date</font><br><br>");
+                    else
+                        DB.Reschedule(health_card, doctor_id, date_and_time, new_date_and_time);
+                }
+                else {
+                    request.setAttribute("errorMsg","<font color='red'>Tried to reschedule to an invalid date</font><br><br>");
+                }
+
+                request.setAttribute("doctor_id",doctor_id);
+
+                appointmentsPage(request, response);
+            }
+       catch(ParseException e)
+                {
+                    e.printStackTrace();
+                }
     }
     
 //          private void insertAppointment(HttpServletRequest request, HttpServletResponse response)

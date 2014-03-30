@@ -18,7 +18,7 @@
             <h3>Appointments for ${doctor.name}</h3><br>
             <a href="${context}/staff/insert_appointment?doctor_id=${doctor.id}">New Appointment</a>
             <hr>
-                
+            <font color="green">${errorMsg}</font>
             <table class="table">
                 <thead>
                     <tr>
