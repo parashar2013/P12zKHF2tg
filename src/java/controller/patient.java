@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.DB;
-import lib.EMF;
 import static lib.utilities.getView;
 import model.User;
 
@@ -77,7 +76,6 @@ public class patient extends HttpServlet {
     
     private void homePage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        EntityManager em = EMF.createEntityManager();
         
         User me = (User)request.getSession().getAttribute("user");
         
@@ -147,7 +145,6 @@ public class patient extends HttpServlet {
     
     private void info(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        EntityManager em = EMF.createEntityManager();
         
         User user = (User)request.getSession().getAttribute("user");
         String healthCard = request.getParameter("healthCard");

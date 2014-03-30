@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lib.DB;
-import lib.EMF;
 import lib.utilities;
 import model.Employee;
 import model.Visit;
