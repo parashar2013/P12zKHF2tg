@@ -16,7 +16,7 @@
     <jsp:attribute name="content">
         <div class="container" id="content-container">
             <h3>Patients</h3><br>
-            <a href="${context}/staff/patient_info?doctor_id=${doctor_id}">New Patient</a><hr>
+            <a href="${context}/staff/patient_info?newp=1&noerr=1&doctor_id=${doctor_id}">New Patient</a><hr>
             <font color="green">${errorMsg}</font>
             <table class="table">
                 <thead>
@@ -30,7 +30,7 @@
                 <tbody>
                     <c:forEach var="patient" items="${patientList}">
                         <tr>
-                            <td><a href="${context}/staff/patient_info?health_card=${patient.healthCard}&doctor_id=${doctor_id}">${patient.name}</a></td>
+                            <td><a href="${context}/staff/patient_info?noerr=1&health_card=${patient.healthCard}&doctor_id=${doctor_id}">${patient.name}</a></td>
                             <td>${patient.address}</td>
                             <td>${patient.phoneNumber}</td>
                             <td>${patient.numberOfVisits}</td>

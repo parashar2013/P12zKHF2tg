@@ -184,6 +184,18 @@ public class staff extends HttpServlet {
         
         patientProfile = null;
         
+        String noerr = request.getParameter("noerr");
+        String newp = request.getParameter("newp");
+        boolean nPatient = false;
+        
+        if (noerr != null && "1".equals(noerr))
+            request.setAttribute("noErr", 1);
+        
+        if (newp != null && "1".equals(newp)) {
+            request.setAttribute("newp", 1);
+            nPatient = true;
+        }
+        
         if(has_health_card)
         {
             health_card=request.getParameter("health_card").isEmpty()?null:request.getParameter("health_card");
@@ -217,6 +229,13 @@ public class staff extends HttpServlet {
             else
             {
                 patientProfile = DB.getPatientByHealthCard(health_card);
+                
+                if (nPatient) {
+                        page="/WEB-INF/view/staff/patient_info.jsp";
+                        
+                        request.setAttribute("errorMsg","This patient already exists.<br>");
+                        request.getRequestDispatcher(page).forward(request, response);
+                }
                 
                 if(phone_number!=null&&!phone_number.isEmpty()
                             && (address!=null && !address.isEmpty())
@@ -257,7 +276,7 @@ public class staff extends HttpServlet {
         } else {
             page="/WEB-INF/view/staff/patient_info.jsp";
         }
-
+        
         request.setAttribute("patientProfile", patientProfile);
         request.getRequestDispatcher(page).forward(request, response);
     }

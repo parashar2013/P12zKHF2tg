@@ -18,19 +18,20 @@
             <form action="${context}/staff/patient_info">
                 <input type="hidden" name="namePage" value="patient_info" />
                 <input type="hidden" name="doctor_id" value="${doctor_id}" />
-                <font color="red">${errorMsg}</font>
+                <c:if test="${newp == 1}"><input type="hidden" name="newp" value="1" /></c:if>
+                <font color="red"><c:if test="${noErr != 1}">${errorMsg}</c:if></font>
                 Name<br>
                 <input type="text" name="name" value="${patientProfile.name}"><br>
                 Health Card<br>
-                <input type="text" name="health_card" value="${patientProfile.healthCard}" readonly><br>
+                <input type="text" name="health_card" value="${patientProfile.healthCard}" <c:if test="${patientProfile.healthCard != null}">readonly</c:if>><br>
                 Address<br>
                 <input type="text" name="address" value="${patientProfile.address}"><br>
                 Phone Number<br>
                 <input type="text" name="phone_number" value="${patientProfile.phoneNumber}"><br>
                 SIN<br>
-                <input type="text" name="sin_number" value="${patientProfile.sinNumber}"><br>
+                <input type="number" name="sin_number" value="${patientProfile.sinNumber}"><br>
                 Number Of Visits<br>
-                <input type="text" name="number_of_visits" value="${patientProfile.numberOfVisits}" readonly><br>
+                <input type="number" name="number_of_visits" value="${patientProfile.numberOfVisits}<c:if test="${patientProfile.numberOfVisits == null}">0</c:if>" readonly><br>
                 Default Doctor<br>
                 <select name="default_doctor">
                     <c:forEach var="doctor" items="${doctorList}">
