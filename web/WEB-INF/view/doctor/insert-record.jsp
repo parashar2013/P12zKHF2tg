@@ -47,7 +47,7 @@
               </div>
               <div class="form-group">
                 <label for="prescriptions">Duration</label>
-                <input type="text" class="form-control" id="duration" name="duration" placeholder="">
+                <input type="text" class="form-control" id="duration" name="duration" value="30" readonly>
               </div>
               <div class="form-group">
                 <label for="diagnosis">Scheduling of Treatment</label>
