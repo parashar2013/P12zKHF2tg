@@ -30,7 +30,7 @@
                 SIN<br>
                 <input type="text" name="sin_number" value="${patientProfile.sinNumber}"><br>
                 Number Of Visits<br>
-                <input type="text" name="number_of_visits" value="${patientProfile.numberOfVisits}"><br>
+                <input type="text" name="number_of_visits" value="${patientProfile.numberOfVisits}" readonly><br>
                 Default Doctor<br>
                 <select name="default_doctor">
                     <c:forEach var="doctor" items="${doctorList}">
