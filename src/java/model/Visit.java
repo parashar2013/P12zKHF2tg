@@ -92,7 +92,8 @@ public class Visit {
             
             // Increment visit count for patient
             PreparedStatement stmt2 = con.prepareStatement("UPDATE Patient "
-                    + "SET number_of_visits = number_of_visits + 1");
+                    + "SET number_of_visits = number_of_visits + 1 WHERE health_card = ?");
+            stmt2.setString(1, hCard);
             
             stmt2.executeUpdate();
             
