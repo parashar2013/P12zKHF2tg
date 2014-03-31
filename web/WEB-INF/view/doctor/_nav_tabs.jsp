@@ -22,5 +22,5 @@
 %>
 
 <li <%=homeTabClass%>><a href="${context}/doctor/home">Current Patients</a></li>
-<li <%=insertTabClass%>><a href="${context}/doctor/insert-record">Insert Record</a></li>
-<li <%=searchTabClass%>><a href="${context}/doctor/search">Search</a></li>
+<li <%=insertTabClass%>><a href="${context}/doctor/insert-record">Insert Visit Record</a></li>
+<li <%=searchTabClass%>><a href="${context}/doctor/search">Search Visits</a></li>

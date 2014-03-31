@@ -124,14 +124,14 @@ public class doctor extends HttpServlet {
     
     private void doSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*        
-        Employee me = (Employee)request.getSession().getAttribute("user");
+              
+        User me = (User)request.getSession().getAttribute("user");
         String name, diagnosis, prescriptions, date1, date2, date3, date4, treatment, comments;
 
-        name = request.getParameter("name");
-        diagnosis = request.getParameter("diagnosis");
-        comments = request.getParameter("comments");
-        prescriptions = request.getParameter("prescriptions");
+        name = request.getParameter("name") == null ? "" : request.getParameter("name");
+        diagnosis = request.getParameter("diagnosis") == null ? "" : request.getParameter("diagnosis");
+        comments = request.getParameter("comments") == null ? "" : request.getParameter("comments");
+        prescriptions = request.getParameter("prescriptions") == null ? "" : request.getParameter("prescriptions");
         date1 = request.getParameter("date1");
         date2 = request.getParameter("date2");
         date3 = request.getParameter("date3");
@@ -146,42 +146,12 @@ public class doctor extends HttpServlet {
         if ("".equals(date4))
             date4 = "2100-01-01";
         
-        EntityManager em = EMF.createEntityManager();
+        Connection con = DB.getConnection();
         
-        Query search = em.createNativeQuery("SELECT p.name, v.diagnosis, v.prescriptions, v.comments, v.treatment, v.date_and_time FROM "
-                + "Visit v LEFT JOIN Patient p ON v.health_card = p.health_card "
-                + "WHERE p.name LIKE '%?%' AND "
-                + "v.diagnosis LIKE '%?%' AND "
-                + "v.prescriptions LIKE '%?%' AND "
-                + "v.comments LIKE '%?%' AND "
-                + "v.treatment BETWEEN '?' AND '?' AND "
-                + "v.date_and_time BETWEEN '?' AND '?' AND "
-                + "v.doctor_id = ?")
-                .setParameter(1, name)
-                .setParameter(2, diagnosis)
-                .setParameter(3, prescriptions)
-                .setParameter(4, comments)
-                .setParameter(5, date3)
-                .setParameter(6, date4)
-                .setParameter(7, date1)
-                .setParameter(8, date2)
-                .setParameter(9, me.getId());
+        List<Map<String, Object>> visitList =
+                Visit.searchVisits(name, diagnosis, prescriptions, comments, date1, date2, date3, date4, parseInt(me.getId()));
         
-        String qstr = "SELECT p.name, v.diagnosis, v.prescriptions, v.comments, v.treatment, v.date_and_time FROM "
-                + "Visit v LEFT JOIN Patient p ON v.health_card = p.health_card "
-                + "WHERE p.name LIKE '%" + name + "%' AND "
-                + "v.diagnosis LIKE '%" + diagnosis + "%' AND "
-                + "v.prescriptions LIKE '%" + prescriptions + "%' AND "
-                + "v.comments LIKE '%" + comments + "%' AND "
-                + "v.treatment BETWEEN '" + date3 + "' AND '" + date4 + "' AND "
-                + "v.date_and_time BETWEEN '" + date1 + "' AND '" + date2 + "' AND "
-                + "v.doctor_id = " + me.getId();
-        
-        search = em.createNativeQuery(qstr);
-        
-        List vResult = search.getResultList();
-        
-        request.setAttribute("vList", vResult);
+        request.setAttribute("vList", visitList);
         
         request.setAttribute("name", name);
         request.setAttribute("diagnosis", diagnosis);
@@ -193,7 +163,6 @@ public class doctor extends HttpServlet {
         request.setAttribute("date4", request.getParameter("date4"));
         
         request.getRequestDispatcher(utilities.getView("doctor/search.jsp")).forward(request, response);
-        */
     }
     
     private void searchPage(HttpServletRequest request, HttpServletResponse response)

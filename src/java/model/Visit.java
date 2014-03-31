@@ -94,6 +94,43 @@ public class Visit {
         }
     }
 
+    
+        public static List<Map<String, Object>> searchVisits(String name, String diagnosis, String prescriptions,
+                String comments, String date1, String date2, String date3, String date4, Integer doctorId) {
+        List<Map<String, Object>> visits = new ArrayList<>();
+        
+        Connection con = DB.getConnection();
+        
+        try {
+            PreparedStatement stmt = con.prepareStatement("SELECT p.name, v.diagnosis, v.prescriptions, v.comments, v.treatment, v.date_and_time FROM "
+                + "Visit v LEFT JOIN Patient p ON v.health_card = p.health_card "
+                + "WHERE p.name LIKE ? AND "
+                + "v.diagnosis LIKE ? AND "
+                + "v.prescriptions LIKE ? AND "
+                + "v.comments LIKE ? AND "
+                + "v.treatment BETWEEN ? AND ? AND "
+                + "v.date_and_time BETWEEN ? AND ? AND "
+                + "v.doctor_id = ?");
+            stmt.setString(1, "%"+name+"%");
+            stmt.setString(2, "%"+diagnosis+"%");
+            stmt.setString(3, "%"+prescriptions+"%");
+            stmt.setString(4, "%"+comments+"%");
+            stmt.setString(5, date3);
+            stmt.setString(6, date4);
+            stmt.setString(7, date1);
+            stmt.setString(8, date2);
+            stmt.setInt(9, doctorId);
+            
+            ResultSet result = stmt.executeQuery();
+            visits = utilities.buildListFromResult(result);
+
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return visits;
+    }
 
     /**
      * @return the healthCard

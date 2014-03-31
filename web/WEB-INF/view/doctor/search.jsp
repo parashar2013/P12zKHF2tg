@@ -48,9 +48,12 @@
                 <tbody>
                 <c:forEach var="visit" items="${vList}">
                     <tr>
-                    <c:forEach var="var" items="${visit}">
-                        <td>${var}</td>
-                    </c:forEach>
+                        <td>${visit.name}</td>
+                        <td>${visit.diagnosis}</td>
+                        <td>${visit.prescriptions}</td>
+                        <td>${visit.comments}</td>
+                        <td>${visit.treatment}</td>
+                        <td>${visit.date_and_time}</td>
                     </tr>
                 </c:forEach>
                 </tbody>
