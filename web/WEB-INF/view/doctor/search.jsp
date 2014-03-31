@@ -43,6 +43,7 @@
                         <th>Comments</th>
                         <th>Scheduling of Treatment</th>
                         <th>Date of Visit</th>
+                        <th>Edit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,6 +55,7 @@
                         <td>${visit.comments}</td>
                         <td>${visit.treatment}</td>
                         <td>${visit.date_and_time}</td>
+                        <td><a href="${context}/doctor/edit-record?health_card=${visit.health_card}&date_and_time=${visit.date_and_time}">Edit</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>

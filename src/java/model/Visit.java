@@ -188,15 +188,19 @@ public class Visit {
         Connection con = DB.getConnection();
         
         try {
-            PreparedStatement stmt = con.prepareStatement("SELECT p.name, v.diagnosis, v.prescriptions, v.comments, v.treatment, v.date_and_time FROM "
+            PreparedStatement stmt = con.prepareStatement("SELECT p.name, p.health_card, v.diagnosis, v.prescriptions, v.comments, v.treatment, v.date_and_time FROM "
                 + "Visit v LEFT JOIN Patient p ON v.health_card = p.health_card "
-                + "WHERE p.name LIKE ? AND "
-                + "v.diagnosis LIKE ? AND "
-                + "v.prescriptions LIKE ? AND "
-                + "v.comments LIKE ? AND "
-                + "v.treatment BETWEEN ? AND ? AND "
-                + "v.date_and_time BETWEEN ? AND ? AND "
-                + "v.doctor_id = ?");
+                + "WHERE p.name LIKE ? "
+                + "AND v.diagnosis LIKE ? "
+                + "AND v.prescriptions LIKE ? "
+                + "AND v.comments LIKE ? "
+                + "AND v.treatment BETWEEN ? AND ? "
+                + "AND v.date_and_time BETWEEN ? AND ? "
+                + "AND v.doctor_id = ? "
+                + "AND v.last_modified IN "
+                    + "(SELECT max(last_modified) FROM Visit "
+                    + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                    + "GROUP BY health_card, date_and_time)");
             stmt.setString(1, "%"+name+"%");
             stmt.setString(2, "%"+diagnosis+"%");
             stmt.setString(3, "%"+prescriptions+"%");
