@@ -17,7 +17,7 @@
         
     <jsp:attribute name="content">
         <div class="container" id="content-container">
-            <h3>Record inserted successfully</h3>
+            <h3>Record updated successfully</h3>
         </div>
     </jsp:attribute>
 </t:base_template>

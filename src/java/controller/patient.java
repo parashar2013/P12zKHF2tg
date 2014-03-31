@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -163,7 +161,7 @@ public class patient extends HttpServlet {
             
             boolean isDefaultDoctor = patient.get("default_doctor_id").equals(parseInt(user.getId()));
             
-            List<Map<String, Object>> visitList = Visit.getVisitByHealthCard(healthCard);
+            List<Map<String, Object>> visitList = Visit.getVisitsByHealthCard(healthCard);
             
             List<Map<String, Object>> doctorsWithPermissionList = Employee.getDoctorsWithPermissionToPatient(user.getId(), healthCard);
             

@@ -34,6 +34,7 @@
                         <th>Diagnosis</th>
                         <th>Prescriptions</th>
                         <th>Date and Time</th>
+                        <th>Edit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +44,7 @@
                         <td>${visit.diagnosis}</td>
                         <td>${visit.prescriptions}</td>
                         <td>${visit.date_and_time}</td>
+                        <td><a href="${context}/doctor/edit-record?health_card=${patient.health_card}&date_and_time=${visit.date_and_time}">Edit</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>

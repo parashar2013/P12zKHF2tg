@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lib.DB;
@@ -47,7 +48,7 @@ public class Visit {
         this.comments = comments;
         this.lastModified = last_modified;
     }
-    public static List<Map<String, Object>> getVisitByHealthCard(String healthCard) {
+    public static List<Map<String, Object>> getVisitsByHealthCard(String healthCard) {
         List<Map<String, Object>> visits = new ArrayList<>();
         
         Connection con = DB.getConnection();
@@ -55,7 +56,11 @@ public class Visit {
         try {
             PreparedStatement stmt = con.prepareStatement("SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time "
                     + "FROM Visit v JOIN Employee e "
-                    + "ON v.doctor_id = e.id WHERE v.health_card = ?");
+                    + "ON v.doctor_id = e.id WHERE v.health_card = ? "
+                    + "AND v.last_modified IN "
+                        + "(SELECT max(last_modified) FROM Visit "
+                        + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                        + "GROUP BY health_card, date_and_time)");
             stmt.setString(1, healthCard);
             
             ResultSet result = stmt.executeQuery();
@@ -67,6 +72,37 @@ public class Visit {
         }
         
         return visits;
+    }
+    
+    public static Map<String, Object> getVisit(String healthCard, String dateAndTime) {
+        List<Map<String, Object>> visits = new ArrayList<>();
+        Map<String, Object> visit = new HashMap<>();
+        
+        Connection con = DB.getConnection();
+        
+        try {
+            PreparedStatement stmt = con.prepareStatement("SELECT p.name, v.* , DATE(treatment) AS treatment_date "
+                    + "FROM Visit v JOIN Patient p ON v.health_card = p.health_card "
+                    + "WHERE v.health_card = ? "
+                    + "AND v.date_and_time = ? "
+                    + "AND v.last_modified IN "
+                        + "(SELECT max(last_modified) FROM Visit "
+                        + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                        + "GROUP BY health_card, date_and_time)");
+            stmt.setString(1, healthCard);
+            stmt.setString(2, dateAndTime);
+            
+            ResultSet result = stmt.executeQuery();
+            visits = utilities.buildListFromResult(result);
+            
+            visit = visits.get(0);
+            
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return visit;
     }
     
     public static void insertVisit(String duration, String hCard, String doctorId, String diagnosis,
@@ -118,6 +154,30 @@ public class Visit {
             catch(SQLException e1) {
                 e1.printStackTrace();
             }
+        }
+    }
+    
+    public static void updateVisit(String duration, String hCard, String doctorId, String diagnosis,
+            String prescriptions, String treatment, String comments, String dateAndTime) {
+        
+        Connection con = DB.getConnection();
+        
+        try {
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO Visit VALUES (?,?,?,?,?,?,?,?,?)");
+            stmt.setInt(1, parseInt(duration));
+            stmt.setString(2, hCard);
+            stmt.setInt(3, parseInt(doctorId));
+            stmt.setString(4, diagnosis);
+            stmt.setString(5, prescriptions);
+            stmt.setTimestamp(6, new Timestamp(new Date(treatment).getTime()));
+            stmt.setString(7, comments);
+            stmt.setString(8, dateAndTime);
+            stmt.setTimestamp(9, new Timestamp(new Date().getTime()));
+            
+            stmt.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     

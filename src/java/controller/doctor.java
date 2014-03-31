@@ -10,6 +10,7 @@ import model.*;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -60,6 +61,12 @@ public class doctor extends HttpServlet {
             case "/insert-record": 
                 insertRecordPage(request, response);
                 return;
+            case "/edit-record": 
+                editRecordPage(request, response);
+                return;
+            case "/edit-record-do": 
+                editRecord(request, response);
+                return;
             case "/search": 
                 searchPage(request, response);
                 return;
@@ -108,10 +115,51 @@ public class doctor extends HttpServlet {
         request.getRequestDispatcher(utilities.getView("doctor/insert-record.jsp")).forward(request, response);
     }
     
+    private void editRecordPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        User me = (User)request.getSession().getAttribute("user");
+        String healthCard = request.getParameter("health_card");
+        String dateAndTime = request.getParameter("date_and_time");
+        
+        Map<String, Object> visit = Visit.getVisit(healthCard, dateAndTime);
+        
+        visit.put("treatment_date", ((Date)visit.get("treatment_date")).toString().replace('-', '/'));
+        
+        request.setAttribute("visit", visit);
+        
+        request.getRequestDispatcher(utilities.getView("doctor/edit-record.jsp")).forward(request, response);
+    }
+    
     private void searchPatientsPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         request.getRequestDispatcher(utilities.getView("doctor/search-patients.jsp")).forward(request, response);
+    }
+    
+    private void editRecord(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        User me = (User)request.getSession().getAttribute("user");
+        String appDate, hCard, diagnosis, prescriptions, duration, treatment, comments;
+
+        appDate = request.getParameter("date_and_time");
+        hCard = request.getParameter("health_card");
+        diagnosis = request.getParameter("diagnosis");
+        prescriptions = request.getParameter("prescriptions");
+        duration = request.getParameter("duration");
+        treatment = request.getParameter("treatment");
+        comments = request.getParameter("comments");
+        
+        Visit.updateVisit(duration, hCard, me.getId(), diagnosis, prescriptions, treatment, comments, appDate);
+        
+        Map<String, Object> visit = Visit.getVisit(hCard, appDate);
+        
+        visit.put("treatment_date", ((Date)visit.get("treatment_date")).toString().replace('-', '/'));
+        
+        request.setAttribute("visit", visit);
+        request.setAttribute("result", "Record updated successfully");
+        request.getRequestDispatcher(utilities.getView("doctor/edit-record.jsp")).forward(request, response);
     }
     
     private void insertRecord(HttpServletRequest request, HttpServletResponse response)
