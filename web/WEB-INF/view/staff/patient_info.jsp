@@ -22,7 +22,7 @@
                 Name<br>
                 <input type="text" name="name" value="${patientProfile.name}"><br>
                 Health Card<br>
-                <input type="text" name="health_card" value="${patientProfile.healthCard}"><br>
+                <input type="text" name="health_card" value="${patientProfile.healthCard}" readonly><br>
                 Address<br>
                 <input type="text" name="address" value="${patientProfile.address}"><br>
                 Phone Number<br>
