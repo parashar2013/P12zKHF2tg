@@ -195,13 +195,13 @@ public class staff extends HttpServlet {
             default_doctor = request.getParameter("default_doctor")==null?0:request.getParameter("default_doctor").isEmpty()?null:parseInt(request.getParameter("default_doctor"));
             current_health = request.getParameter("current_health")==null?null:request.getParameter("current_health").isEmpty()?null:request.getParameter("current_health");
             password = request.getParameter("password")==null?null:request.getParameter("password").isEmpty()?null:request.getParameter("password");
-            number_of_visits = request.getParameter("number_of_visits")==null?0:request.getParameter("number_of_visits").isEmpty()?null:parseInt(request.getParameter("number_of_visits"));
-            sin_number = request.getParameter("sin_number")==null?0:request.getParameter("sin_number").isEmpty()?null:parseInt(request.getParameter("sin_number"));
+            number_of_visits = request.getParameter("number_of_visits")==null?-1:request.getParameter("number_of_visits").isEmpty()?-1:parseInt(request.getParameter("number_of_visits"));
+            sin_number = request.getParameter("sin_number")==null?0:request.getParameter("sin_number").isEmpty()?0:parseInt(request.getParameter("sin_number"));
             
             if(p==null)
             {
-                if(
-                        (address!=null && !address.isEmpty())
+                if(phone_number!=null&&!phone_number.isEmpty()
+                        && (address!=null && !address.isEmpty())
                         && (name!=null &&!name.isEmpty())
                         && (default_doctor>0)
                         && (current_health!=null&&!current_health.isEmpty())
@@ -218,10 +218,8 @@ public class staff extends HttpServlet {
             {
                 patientProfile = DB.getPatientByHealthCard(health_card);
                 
-                if(phone_number!=null&&!phone_number.isEmpty())
-                    
-                    if(
-                            (address!=null && !address.isEmpty())
+                if(phone_number!=null&&!phone_number.isEmpty()
+                            && (address!=null && !address.isEmpty())
                             && (name!=null &&!name.isEmpty())
                             && (default_doctor>0)
                             && (current_health!=null&&!current_health.isEmpty())
@@ -348,31 +346,6 @@ public class staff extends HttpServlet {
                 }
     }
     
-//          private void insertAppointment(HttpServletRequest request, HttpServletResponse response)
-//                 throws ServletException, IOException,ClassNotFoundException,SQLException{
-//              String health_card=request.getParameter("health_card")==null?null:request.getParameter("health_card").isEmpty()?null:request.getParameter("health_card");
-//              String date_and_time_string=request.getParameter("date_and_time")==null?null:request.getParameter("date_and_time").isEmpty()?null:request.getParameter("date_and_time");
-//              int doc_id = request.getParameter("doctor_id")==null?null:request.getParameter("doctor_id").isEmpty()?null:parseInt(request.getParameter("doctor_id"));
-//              String page = "/WEB-INF/view/staff/insert_appointment.jsp";
-//              try{
-//                  if(health_card != null)
-//                  {
-//                      Date date_and_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH).parse(date_and_time_string);
-//                      AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
-//                      DB.insertAppointment(app_pk,doc_id);
-//                      appointmentsPage(request,response);
-//                  }
-//                  else
-//                  {
-//                    request.getRequestDispatcher(page).forward(request, response);
-//                  }
-//              }
-//              catch(ParseException e)
-//              {
-//                  response.sendError(HttpServletResponse.SC_NOT_FOUND,"ParseException thrown" + e.getMessage());
-//              }
-//          }
-    
     private void insertAppointment(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException,ClassNotFoundException,SQLException{
         String health_card=request.getParameter("health_card")==null?null:request.getParameter("health_card").isEmpty()?null:request.getParameter("health_card");
@@ -385,19 +358,6 @@ public class staff extends HttpServlet {
         
         if(health_card != null)
         {
-            /*int year = request.getParameter("year")==null?null:request.getParameter("year").isEmpty()?null:parseInt(request.getParameter("year"));
-            int month = request.getParameter("month")==null?null:request.getParameter("month").isEmpty()?null:parseInt(request.getParameter("month"));
-            int day = request.getParameter("day")==null?null:request.getParameter("day").isEmpty()?null:parseInt(request.getParameter("day"));
-            int hour = request.getParameter("hour")==null?null:request.getParameter("hour").isEmpty()?null:parseInt(request.getParameter("hour"));
-            int minute = request.getParameter("minute")==null?null:request.getParameter("minute").isEmpty()?null:parseInt(request.getParameter("minute"));
-            String date_and_time_string = String.format("%4d-%2d-%2d %2d:%2d:00.000",year,month,day,hour,minute);
-            System.out.println(date_and_time_string);
-            DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
-            FORMATTER.setLenient(false);
-            Date date_and_time = FORMATTER.parse(date_and_time_string);
-            System.out.println(date_and_time);*/
-            //Date today = new Date();
-            //AppointmentPK app_pk = new AppointmentPK(health_card,date_and_time);
             String dt = request.getParameter("date") + " " + request.getParameter("time");
             
             if (request.getParameter("date").equals("") || request.getParameter("time").equals("")) {

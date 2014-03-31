@@ -22,7 +22,7 @@
                 Name<br>
                 <input type="text" name="name" value="${patientProfile.name}"><br>
                 Health Card<br>
-                <input type="text" name="health_card" value="${patientProfile.healthCard}"><br>
+                <input type="text" name="health_card" value="${patientProfile.healthCard}" readonly><br>
                 Address<br>
                 <input type="text" name="address" value="${patientProfile.address}"><br>
                 Phone Number<br>
@@ -30,7 +30,7 @@
                 SIN<br>
                 <input type="text" name="sin_number" value="${patientProfile.sinNumber}"><br>
                 Number Of Visits<br>
-                <input type="text" name="number_of_visits" value="${patientProfile.numberOfVisits}"><br>
+                <input type="text" name="number_of_visits" value="${patientProfile.numberOfVisits}" readonly><br>
                 Default Doctor<br>
                 <select name="default_doctor">
                     <c:forEach var="doctor" items="${doctorList}">
