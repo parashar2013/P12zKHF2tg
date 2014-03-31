@@ -66,6 +66,7 @@ public class Patient {
         return patients;
     }
     
+    
     public static List<Map<String, Object>> getPatientsByHealthCard(String healthCard) {
         List<Map<String, Object>> patients = new ArrayList<>();
         
@@ -76,6 +77,40 @@ public class Patient {
                     + "FROM Patient p JOIN Employee e ON p.default_doctor_id = e.id "
                     + "WHERE p.health_card = ?");
             stmt.setString(1, healthCard);
+            
+            ResultSet result = stmt.executeQuery();
+            patients = utilities.buildListFromResult(result);
+            
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return patients;
+    }
+    
+    public static List<Map<String, Object>> searchPatients(Integer doctorId, String name, String healthCard, String date) {
+        List<Map<String, Object>> patients = new ArrayList<>();
+        
+        Connection con = DB.getConnection();
+        
+        try {
+            String sql = "SELECT health_card, p.name AS name, address, phone_number, number_of_visits "
+                    + "FROM Patient p JOIN Doc_Patient dp ON p.health_card = dp.patient_health_card "
+                    + "WHERE dp.doctor_id = ? ";
+            
+            if (!name.isEmpty()) {
+                sql += " AND p.name LIKE '%"+name+"%' ";
+            }
+            if (!healthCard.isEmpty()) {
+                sql += " AND p.health_card = '"+healthCard+"' ";
+            }
+            if (!date.isEmpty()) {
+                //sql += " AND v.date = '"+date+"' ";
+            }
+            
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, doctorId);
             
             ResultSet result = stmt.executeQuery();
             patients = utilities.buildListFromResult(result);

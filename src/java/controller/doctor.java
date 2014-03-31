@@ -66,6 +66,12 @@ public class doctor extends HttpServlet {
             case "/search-do": 
                 doSearch(request, response);
                 return;
+            case "/search-patients": 
+                searchPatientsPage(request, response);
+                return;
+            case "/search-patients-do": 
+                doPatientsSearch(request, response);
+                return;
             case "/insert": 
                 insertRecord(request, response);
                 return;
@@ -100,6 +106,12 @@ public class doctor extends HttpServlet {
         request.setAttribute("appointments", appointments);
         
         request.getRequestDispatcher(utilities.getView("doctor/insert-record.jsp")).forward(request, response);
+    }
+    
+    private void searchPatientsPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        request.getRequestDispatcher(utilities.getView("doctor/search-patients.jsp")).forward(request, response);
     }
     
     private void insertRecord(HttpServletRequest request, HttpServletResponse response)
@@ -146,8 +158,6 @@ public class doctor extends HttpServlet {
         if ("".equals(date4))
             date4 = "2100-01-01";
         
-        Connection con = DB.getConnection();
-        
         List<Map<String, Object>> visitList =
                 Visit.searchVisits(name, diagnosis, prescriptions, comments, date1, date2, date3, date4, parseInt(me.getId()));
         
@@ -163,6 +173,27 @@ public class doctor extends HttpServlet {
         request.setAttribute("date4", request.getParameter("date4"));
         
         request.getRequestDispatcher(utilities.getView("doctor/search.jsp")).forward(request, response);
+    }
+    
+        private void doPatientsSearch(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+              
+        User me = (User)request.getSession().getAttribute("user");
+        String name, health_card, last_visit_date;
+
+        name = request.getParameter("name") == null ? "" : request.getParameter("name");
+        health_card = request.getParameter("health_card") == null ? "" : request.getParameter("health_card");
+        last_visit_date = request.getParameter("date") == null ? "" : request.getParameter("date");
+
+        List<Map<String, Object>> patientList = Patient.searchPatients(parseInt(me.getId()), name, health_card, last_visit_date);
+        
+        request.setAttribute("patientList", patientList);
+        
+        request.setAttribute("name", name);
+        request.setAttribute("health_card", health_card);
+        request.setAttribute("date", last_visit_date);
+        
+        request.getRequestDispatcher(utilities.getView("doctor/search-patients.jsp")).forward(request, response);
     }
     
     private void searchPage(HttpServletRequest request, HttpServletResponse response)
