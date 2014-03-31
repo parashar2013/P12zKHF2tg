@@ -75,6 +75,8 @@ public class Visit {
         Connection con = DB.getConnection();
         
         try {
+            con.setAutoCommit(false);   // Use transaction
+            
             PreparedStatement stmt = con.prepareStatement("INSERT INTO Visit VALUES (?,?,?,?,?,?,?,?,?)");
             stmt.setInt(1, parseInt(duration));
             stmt.setString(2, hCard);
@@ -88,14 +90,37 @@ public class Visit {
             
             stmt.executeUpdate();
             
-            con.close();
+            // Increment visit count for patient
+            PreparedStatement stmt2 = con.prepareStatement("UPDATE Patient "
+                    + "SET number_of_visits = number_of_visits + 1");
+            
+            stmt2.executeUpdate();
+            
+            con.commit();
+            
+            
         } catch (SQLException e) {
             e.printStackTrace();
+            
+            if (con != null) {
+                try {
+                    System.err.print("Transaction is being rolled back");
+                    con.rollback();
+                } catch(SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            try {
+                con.close();
+            }
+            catch(SQLException e1) {
+                e1.printStackTrace();
+            }
         }
     }
-
     
-        public static List<Map<String, Object>> searchVisits(String name, String diagnosis, String prescriptions,
+    public static List<Map<String, Object>> searchVisits(String name, String diagnosis, String prescriptions,
                 String comments, String date1, String date2, String date3, String date4, Integer doctorId) {
         List<Map<String, Object>> visits = new ArrayList<>();
         
