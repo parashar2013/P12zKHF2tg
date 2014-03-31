@@ -468,7 +468,11 @@ public class DB {
             ResultSet resultSet = stmt.executeQuery(String.format(
                     
                     
-                    "SELECT * FROM Visit WHERE doctor_id=%s",doctor_id
+                    "SELECT * FROM Visit v WHERE v.doctor_id=%s "
+                            + "AND v.last_modified IN "
+                            + "(SELECT max(last_modified) FROM Visit "
+                            + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                            + "GROUP BY health_card, date_and_time)",doctor_id
             ));
             ret = new ArrayList<>();
             while (resultSet.next()) {
@@ -504,9 +508,13 @@ public class DB {
             con = getConnection();
             stmt = con.createStatement();
             ResultSet resultSet = stmt.executeQuery(String.format(
-                    
-                    
-                    "SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time FROM Visit v LEFT JOIN Employee e ON v.doctor_id = e.id WHERE v.health_card=%s",health_card
+                    "SELECT e.name, v.diagnosis, v.prescriptions, v.date_and_time "
+                            + "FROM Visit v LEFT JOIN Employee e ON v.doctor_id = e.id "
+                            + "WHERE v.health_card=%s "
+                            + "AND v.last_modified IN "
+                            + "(SELECT max(last_modified) FROM Visit "
+                            + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                            + "GROUP BY health_card, date_and_time)",health_card
             ));
             ret = new ArrayList<>();
             while (resultSet.next()) {
@@ -539,7 +547,11 @@ public class DB {
             ResultSet resultSet = stmt.executeQuery(String.format(
                     
                     
-                    "SELECT * FROM Visit WHERE doctor_id=%s",doctor_id
+                    "SELECT * FROM Visit v WHERE v.doctor_id=%s "
+                            + "AND v.last_modified IN "
+                            + "(SELECT max(last_modified) FROM Visit "
+                            + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                            + "GROUP BY health_card, date_and_time)",doctor_id
             ));
             ret = new ArrayList<>();
             while (resultSet.next()) {
@@ -577,7 +589,11 @@ public class DB {
             ResultSet resultSet = stmt.executeQuery(String.format(
                     
                     
-                    "SELECT DISTINCT health_card FROM Visit WHERE doctor_id = " + doctor_id
+                    "SELECT DISTINCT v.health_card FROM Visit v WHERE v.doctor_id =%s "
+                            + "AND v.last_modified IN "
+                            + "(SELECT max(last_modified) FROM Visit "
+                            + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                            + "GROUP BY health_card, date_and_time)", doctor_id
             ));
             ret = new ArrayList<>();
             while (resultSet.next()) {
@@ -603,11 +619,13 @@ public class DB {
             con = getConnection();
             stmt = con.createStatement();
             ResultSet resultSet = stmt.executeQuery(String.format(
-                    
-                    
-                    "SELECT * FROM Visit "
-                            + "WHERE doctor_id = " + doctor_id + " "
-                            + "AND date_and_time BETWEEN '" + date1 + "' AND '" + date2 + "'" + hcstr
+                    "SELECT * FROM Visit v "
+                            + "WHERE v.doctor_id = " + doctor_id + " "
+                            + "AND v.last_modified IN "
+                            + "(SELECT max(last_modified) FROM Visit "
+                            + "WHERE health_card = v.health_card AND date_and_time = v.date_and_time "
+                            + "GROUP BY health_card, date_and_time) "
+                            + "AND v.date_and_time BETWEEN '" + date1 + "' AND '" + date2 + "'" + hcstr
             ));
             ret = new ArrayList<>();
             while (resultSet.next()) {
