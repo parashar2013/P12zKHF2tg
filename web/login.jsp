@@ -29,9 +29,9 @@
                 <input type="text" name="login_id" id="login_id" class="form-control" placeholder="Health Card" maxlength="10">
                 <input type="password" name="login_password" id="login_password" class="form-control" placeholder="Password">
 
-                <label class="checkbox">
+                <!--<label class="checkbox">
                     <input type="checkbox" name="remember_me"> Remember me
-                </label>
+                </label>-->
                 <button class="btn btn-lg btn-block btn-primary" type="submit" id="submit">Login</button>
             </form>
         </div> <!-- /container -->
