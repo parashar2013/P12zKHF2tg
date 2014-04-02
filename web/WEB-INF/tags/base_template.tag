@@ -24,7 +24,7 @@
         
         <!-- CSS -->
         <link rel="stylesheet" href="${context}/css/bootstrap.min.css">
-        <link rel="stylesheet" href="${context}/css/bootstrap-theme.min.css">
+        <!--<link rel="stylesheet" href="${context}/css/bootstrap-theme.min.css">-->
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
         <link rel="stylesheet" href="${context}/css/style.css">
         
